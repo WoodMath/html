@@ -20,10 +20,35 @@ var gl;
 
 var vbVertexBuffer;
 var fVertices = [
-	-0.5, -0.5, 0.0,
-	0.5, -0.5, 0.0,
-	-0.5, 0.5, 0.0,
-	0.5, 0.5, 0.0
+	 // front face
+	-0.5, -0.5, 0.5,
+	0.5, -0.5, 0.5,
+	-0.5, 0.5, 0.5,
+	0.5, 0.5, 0.5,
+				 
+	// up face
+	-0.5, 0.5, -0.5,
+	0.5, 0.5, -0.5,
+				 
+	// right face
+	0.5, 0.5, 0.5,
+	0.5, -0.5, -0.5,
+	0.5, -0.5, 0.5,
+	
+	// down face
+	-0.5, -0.5, 0.5,
+	0.5, -0.5, -0.5,
+	-0.5, -0.5, -0.5,
+				 
+	// back face
+	0.5, 0.5, -0.5,
+	-0.5, 0.5, -0.5,
+	-0.5, -0.5, -0.5,
+	
+	// left face
+	-0.5, -0.5, 0.5,
+	-0.5, 0.5, -0.5,
+	-0.5, 0.5, 0.5
 
 ];
 
@@ -35,6 +60,7 @@ var mvMatrix;
 var sVs =
 	"attribute vec3 aPos;" +
 	"uniform vec3 uTrans;" +
+	"uniform mat3 uProj;" +
 	"void main() {" +
 	"	gl_Position = vec4(aPos, 1.0) + vec4(uTrans, 0.0);" +
 //	"	gl_Position = vec4(aPos, 1.0);" +
@@ -50,14 +76,14 @@ var sFs =
 var shaderProgram;
 var pos;
 var trans;
-
+var proj;
 
 function mouseMovement(e){
 	var clientCenterX = canvas.clientWidth/2;
 	var clientCenterY = canvas.clientHeight/2;
 	v3translate[0] = (e.clientX - clientCenterX)/clientCenterX;
 	v3translate[1] = (clientCenterY - e.clientY)/clientCenterY;
-	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1]);
+//	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1]);
 	draw();
 	
 }
@@ -77,24 +103,10 @@ function draw() {
 	gl.useProgram(shaderProgram);
 
 	gl.uniform3fv(trans,v3translate);
+	gl.uniformMatrix3fv(proj,false,pMatrix);
 	
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, vbVertexBuffer.numItems);
 }
-
-/*
- 
- function attributeSetFloats(gl, prog, attr_name, rsize, arr) {
-	gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr),
- gl.STATIC_DRAW);
-	var attr = gl.getAttribLocation(prog, attr_name);
-	gl.enableVertexAttribArray(attr);
-	gl.vertexAttribPointer(attr, rsize, gl.FLOAT, false, 0, 0);
- }
- */
-
-
-
 
 
 function initGL() {
@@ -162,7 +174,7 @@ function initBuffers(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fVertices), gl.STATIC_DRAW);
 	
 	
-	vbVertexBuffer.numItems = 4;	// 4 vectors in vertex buffer
+	vbVertexBuffer.numItems = 17;	// 4 vectors in vertex buffer
 	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
@@ -176,19 +188,13 @@ function initBuffers(){
 	// create UNIFORM variable, and assign shader uniform (uTrans) to it
 	trans = gl.getUniformLocation(shaderProgram, "uTrans");
 	
+	proj = gl.getUniformLocation(shaderProgram, "uProj");
 	
 }
 
 
 function WebGLStart(){
-/*
-	var imported = document.createElement('script');
-	imported.src = 'gl-matrix.js';
-	document.head.appendChild(imported);
-*/
 
-
-//	setTimeout(initGL, 100);
 
 	pMatrix = mat4.create();
 	mvMatrix = mat4.create();
