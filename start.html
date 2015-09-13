@@ -138,17 +138,17 @@
 
 					fr = new FileReader();
 					fr.onload = function(e){
-						console.log(e.target.result);
+//						console.log(e.target.result);
 						objOBJ = loader.parse(e.target.result);
 						objLoaded = Boolean(1);
 						
 //						var objOBJ = new THREE.Mesh(objMesh,material);
 
-//						objOBJ.scale.set(100,100,100);
+						objOBJ.scale.set(10,10,10);
 						scene.add(objOBJ);
 						
 						
-						objOBJ.position.y = - 80*0;
+						objOBJ.position.x = objOBJ.position.y = objOBJ.position.z = 0;
 
 					}
 
