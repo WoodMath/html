@@ -36,7 +36,7 @@ var sVs =
 	"attribute vec3 aPos;" +
 	"uniform vec3 uTrans;" +
 	"void main() {" +
-	"	gl_Position = vec4(aPos, 1.0) + vec4(uTrans, 1.0);" +
+	"	gl_Position = vec4(aPos, 1.0) + vec4(uTrans, 0.0);" +
 //	"	gl_Position = vec4(aPos, 1.0);" +
 	"}";
 	
@@ -48,6 +48,8 @@ var sFs =
 
 
 var shaderProgram;
+var pos;
+var trans;
 
 
 function mouseMovement(e){
@@ -74,14 +76,10 @@ function draw() {
  
 	gl.useProgram(shaderProgram);
 
-	gl.uniform3fv(unif,v3translate);
+	gl.uniform3fv(trans,v3translate);
 	
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, vbVertexBuffer.numItems);
 }
-
-var attr;
-var unif;
-
 
 /*
  
@@ -168,15 +166,15 @@ function initBuffers(){
 	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
-	attr = gl.getAttribLocation(shaderProgram, "aPos");
-	// enable addtribute variable (attr) when rendering
-	gl.enableVertexAttribArray(attr);
+	pos = gl.getAttribLocation(shaderProgram, "aPos");
+	// enable addtribute variable (pos) when rendering
+	gl.enableVertexAttribArray(pos);
 	// specifies location (attr) of current vertex attributes (vbVertexBuffer)
-	gl.vertexAttribPointer(attr, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(pos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
 	
 	// create UNIFORM variable, and assign shader uniform (uTrans) to it
-	unif = gl.getUniformLocation(shaderProgram, "uTrans");
+	trans = gl.getUniformLocation(shaderProgram, "uTrans");
 	
 	
 }
