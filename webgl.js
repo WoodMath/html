@@ -88,7 +88,7 @@ var sFs =
 "}";
 
 
-
+var vs, fs;
 var shaderProgram;
 var pos;
 var trans;
@@ -147,8 +147,6 @@ function initGL() {
 
 function initShaders(){
 	
-	var vs, fs;
-	
 	
 	// create shader program (shaderProgram)
 	shaderProgram = gl.createProgram();
@@ -190,7 +188,7 @@ function initBuffers(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fVertices), gl.STATIC_DRAW);
 	
 	
-	vbVertexBuffer.numItems = 17;	// 4 vectors in vertex buffer
+	vbVertexBuffer.numItems = fVertices.length / 3;	// 4 vectors in vertex buffer
 	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
@@ -208,6 +206,24 @@ function initBuffers(){
 	
 }
 
+function resetBuffers(){
+	gl.deleteBuffer(vbVertexBuffer);
+}
+
+function resetShaders(){
+	gl.deleteProgram(shaderProgram);
+	gl.deleteShader(vs);
+	gl.deleteShader(fs);
+}
+
+function resetAll(){
+	resetBuffers();
+	resetShaders();
+	initShaders();
+	initBuffers();
+	draw();
+	
+}
 
 function WebGLStart(){
 	

@@ -55,17 +55,18 @@ table{
 }
 
 
-.tableLabel{
+#tableLabel{
+	position: absolute;
 	text-align: right;
-	width: 100px;
+	width: 200px;
 }
 
-.tableButton{
+#tableButton{
 	text-align: left;
 	width: 100px;
 }
 
-.alignLeft{
+#alignLeft{
 	position: float;
 	text-align: left;
 	left: 0px;
@@ -73,18 +74,22 @@ table{
 	background-color: #000000;
 }
 
-.alignRight{
+#alignRight{
 	position: float;
 	text-align: right;
 	right: 0px;
-	width: 300px;
+	width: 500px;
 	background-color: #000000;
 }
 
-.alignHorizontalCenter{
+#alignHorizontalCenter{
 	vertical-align:		left;
 	
 }
 
 .none{
+}
+
+#webg_canvas{
+	background-color: #000000;
 }

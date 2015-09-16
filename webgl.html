@@ -23,11 +23,11 @@
 				<form>
 					<table>
 					<th id="tableLabel"></th><th id="tableButton"></th><br>
-					<tr><td>Vertex List file:</td><td><input type="file" id="fileVertexList" onchange="buttonRead(event)"></td></tr><br>
-					<tr><td>Vertex Shader file:</td><td><input type="file" id"fileVertexShader" onchange="buttonRead(event)"></td></tr><br>
-					<tr><td>Fragment Shader file:</td><td><input type="file" id="fileFragmentShader" onchange="buttonRead(event)"></td></tr><br>
+					<tr><td>Vertex List file:</td><td><input type="file" id="fileVertexList" onchange="buttonRead(event,testVectorFile,'fVertices')"></td></tr><br>
+					<tr><td>Vertex Shader file:</td><td><input type="file" id"fileVertexShader" onchange="buttonRead(event,testShaderFile,'sVs')"></td></tr><br>
+					<tr><td>Fragment Shader file:</td><td><input type="file" id="fileFragmentShader" onchange="buttonRead(event,testShaderFile,'sFs')"></td></tr><br>
+					<tr><td></td><td><input type="button" value="Update" onclick="resetAll()"></td></tr><br>
 					
-					<output id="list"></output>
 					</table>
 				</form>
 			</div>
