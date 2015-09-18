@@ -4,12 +4,17 @@
 		<meta charset="utf-8" />
 		<title>CSE5393 WebGL Interface</title>
 		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type="text/javascript" src="js/gl-matrix.js"></script>
+		<script type="text/javascript" src="js/Blob.js"></script>
+		<script type="text/javascript" src="js/FileSaver.js"></script>
+		<script type="text/javascript" src="geom.js"></script>
 		<script type="text/javascript" src="webgl.js"></script>
 
 	</head>
 	<body onload="WebGLStart()">
 
-	<script type="text/javascript" src="gl-matrix.js"></script>
+
+
 
 
 <!-- based on code modified from Prof. F. Kamangar and
@@ -23,7 +28,7 @@
 				<form>
 					<table>
 					<th id="tableLabel"></th><th id="tableButton"></th><br>
-					<tr><td>Vertex List file:</td><td><input type="file" id="fileVertexList" onchange="buttonRead(event,testVectorFile,'fVertices')"></td></tr><br>
+					<tr><td>Vertex List file:</td><td><input type="file" id="fileVertexList" onchange="buttonRead(event,testVectorFile,'objRender','vertex_data')"></td></tr><br>
 					<tr><td>Vertex Shader file:</td><td><input type="file" id"fileVertexShader" onchange="buttonRead(event,testShaderFile,'sVs')"></td></tr><br>
 					<tr><td>Fragment Shader file:</td><td><input type="file" id="fileFragmentShader" onchange="buttonRead(event,testShaderFile,'sFs')"></td></tr><br>
 					<tr><td></td><td><input type="button" value="Update" onclick="resetAll()"></td></tr><br>

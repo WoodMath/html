@@ -1,8 +1,12 @@
 var canvas;
 var gl;
 
+
 var vbVertexBuffer;
-var fVertices = [
+
+var objRender = new Geom();
+objRender.data_type = WebGLRenderingContext.TRIANGLE_STRIP;
+objRender.vertex_data = [
 				 // front face
 				 -0.5, -0.5, 0.5,
 				 0.5, -0.5, 0.5,
@@ -35,7 +39,7 @@ var fVertices = [
 				 
 				 ];
 
-var fNormals = [
+objRender.normal_data = [
 				// front face
 				0.0, 0.0, 1.0,
 				0.0, 0.0, 1.0,
@@ -121,7 +125,7 @@ function draw() {
 	gl.uniform3fv(trans,v3translate);
 	gl.uniformMatrix3fv(proj,false,pMatrix);
 	
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, vbVertexBuffer.numItems);
+	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
 }
 
 
@@ -185,10 +189,10 @@ function initBuffers(){
 	// Make vertex buffer (vbVertexBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	// Bind (Float32 converted) vertex array (vertices) to active vertex buffer (vbVertexBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fVertices), gl.STATIC_DRAW);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
 	
 	
-	vbVertexBuffer.numItems = fVertices.length / 3;	// 4 vectors in vertex buffer
+	vbVertexBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
 	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
