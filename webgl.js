@@ -2,7 +2,7 @@ var canvas;
 var gl;
 
 
-var vbVertexBuffer;
+var vbVertexBuffer, vbNormalBuffer;
 
 var objRender = new Geom();
 objRender.data_type = WebGLRenderingContext.TRIANGLE_STRIP;
@@ -74,36 +74,52 @@ objRender.normal_data = [
 
 var v3translate = [0.0, 0.0, 0.0];
 
-var pMatrix;
-var mvMatrix;
+
 
 var sVs =
 "attribute vec3 aPos;" +
+"attribute vec3 aNorm;" +
 "uniform vec3 uTrans;" +
-"uniform mat3 uProj;" +
+"uniform vec3 uRotn;" +
+"uniform mat4 uProj;" +
+"uniform mat4 uMove;" +
+"varying lowp vec3 vDummy;" +
 "void main() {" +
 "	gl_Position = vec4(aPos, 1.0) + vec4(uTrans, 0.0);" +
-//	"	gl_Position = vec4(aPos, 1.0);" +
+"	gl_Position = uProj * uMove * vec4(aPos, 1.0) ; " +
+"	vDummy = aNorm;" +
 "}";
 
 var sFs =
-"void main() {"+
-"	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);"+
+"varying lowp vec3 vDummy;" +
+"void main() {" +
+"	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);" +
+"	lowp vec3 vNew = vec3(1.0, 1.0, 1.0);" +
 "}";
 
 
 var vs, fs;
 var shaderProgram;
-var pos;
-var trans;
-var proj;
-
+var pos, norm;
+var pMatrix, mvMatrix;
+var uProj, uMove;
+var tMatrix, tempMatrix;
 function mouseMovement(e){
+	var fSwitch = -1.0;
+/*
+	'fSwitch' dictates movement of 'v3translate' vector based upon matrix mordering
+		fSwitch = -1.0 when gl_Position = uProj * uMove * vec4(aPos, 1.0) ;
+		fSwitch =  1.0 when gl_Position = uMove * uProj * vec4(aPos, 1.0) ;
+ 
+*/
 	var clientCenterX = canvas.clientWidth/2;
 	var clientCenterY = canvas.clientHeight/2;
-	v3translate[0] = (e.clientX - clientCenterX)/clientCenterX;
-	v3translate[1] = (clientCenterY - e.clientY)/clientCenterY;
+	v3translate[0] = (e.clientX - this.offsetLeft - clientCenterX)/clientCenterX * fSwitch;
+	v3translate[1] = (clientCenterY - e.clientY + this.offsetTop)/clientCenterY * fSwitch;
+	v3translate[2] = 0;
 	//	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1]);
+	mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
+
 	draw();
 	
 }
@@ -115,15 +131,24 @@ function draw() {
 	
 	
 	
-	mat4.perspective(pMatrix, 30, gl.viewportWidth / gl.viewportHeight, -0.1, 5.0);
-	
 	
 	
  
 	gl.useProgram(shaderProgram);
 	
 	gl.uniform3fv(trans,v3translate);
-	gl.uniformMatrix3fv(proj,false,pMatrix);
+	
+/*
+	tempMatrix = mat3.create();
+	tempMatrix = mat3.normalFromMat4(tempMatrix,pMatrix);
+	tMatrix = mat4.create();
+	tMatrix = mat4FromMat3(tMatrix, tempMatrix);
+	tMatrix = mat4.transpose(tMatrix, pMatrix);
+*/	
+	tMatrix = mat4.transpose(mat4.create(), pMatrix);
+	
+	gl.uniformMatrix4fv(uProj,false,tMatrix);
+	gl.uniformMatrix4fv(uMove,false,mvMatrix);
 	
 	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
 }
@@ -137,9 +162,20 @@ function initGL() {
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
 		
-		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		
 		canvas.addEventListener( 'mousemove', mouseMovement, false );
+		
+		pMatrix = mat4.create();
+		pMatrix = mat4.identity(pMatrix);
+		pMatrix = mat4.perspective(pMatrix, 30, gl.viewportWidth / gl.viewportHeight, 5.0, -5.0);
+
+		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+
+		mvMatrix = mat4.create();
+		mvMatrix = mat4.identity(mat4.create());
+		mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
+		
+		
 		
 	} catch(e) {
 		
@@ -185,15 +221,16 @@ function initShaders(){
 
 function initBuffers(){
 	vbVertexBuffer = gl.createBuffer();
-	
-	// Make vertex buffer (vbVertexBuffer) active
-	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
-	// Bind (Float32 converted) vertex array (vertices) to active vertex buffer (vbVertexBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
+	vbNormalBuffer = gl.createBuffer();
 	
 	
 	vbVertexBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
 	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
+
+	// Make vertex buffer (vbVertexBuffer) active
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
+	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active vertex buffer (vbVertexBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
 	pos = gl.getAttribLocation(shaderProgram, "aPos");
@@ -203,15 +240,39 @@ function initBuffers(){
 	gl.vertexAttribPointer(pos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
 	
+	
+	vbNormalBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
+	vbNormalBuffer.itemSize = 3;	// 3 elements in size each
+	
+	// Make vertex buffer (vbNormalBuffer) active
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
+	// Bind (Float32 converted) vertex array (objRender.normal_data) to active vertex buffer (vbNormalBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
+	
+	// create ATTRIBUTE variable, and assign shader attribute (aNorm) to it
+	norm = gl.getAttribLocation(shaderProgram, "aNorm");
+	// enable addtribute variable (norm) when rendering
+	gl.enableVertexAttribArray(norm);
+	// specifies location (attr) of current vertex attributes (vbVertexBuffer)
+	gl.vertexAttribPointer(norm, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+	// Make vertex buffer (vbVertexBuffer) active
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
+	// Bind (Float32 converted) vertex array (vertices) to active vertex buffer (vbVertexBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
+	
+	
 	// create UNIFORM variable, and assign shader uniform (uTrans) to it
 	trans = gl.getUniformLocation(shaderProgram, "uTrans");
 	
-	proj = gl.getUniformLocation(shaderProgram, "uProj");
+	uProj = gl.getUniformLocation(shaderProgram, "uProj");
+	uMove = gl.getUniformLocation(shaderProgram, "uMove");
 	
 }
 
 function resetBuffers(){
 	gl.deleteBuffer(vbVertexBuffer);
+	gl.deleteBuffer(vbNormalBuffer);
 }
 
 function resetShaders(){
@@ -232,8 +293,7 @@ function resetAll(){
 function WebGLStart(){
 	
 	
-	pMatrix = mat4.create();
-	mvMatrix = mat4.create();
+
 	
 	initGL();
 	initShaders();
