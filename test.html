@@ -1,58 +1,80 @@
-<a href="test.php">Download my Text File</a><br>
+<!DOCTYPE html>
+<html>
+	<head>
 
-<script type="script/javascript">
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			
 
-window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-var fs;
-
-function initFS() {
-	console.log("init filesystem")
-	window.requestFileSystem(window.TEMPORARY, 1024 * 1024, function (filesystem) {
-        fs = filesystem;
-        console.log(fs);
-	}, errorHandler);
-}
-
-function errorHandler(e) {
-	var msg = '';
-	switch (e.code) {
-		...
-	};
-	console.log('Error: ' + msg);
-}
-
-function receiveFile(cont) {
-	fs.root.getFile('log.txt', {
-					create: true
-					}, function (fileEntry) {
-					// Create a FileWriter object for our FileEntry (log.txt).
-					fileEntry.createWriter(function (fileWriter) {
-										   fileWriter.seek(fileWriter.length);
-										   fileWriter.onwriteend = function (e) {
-										   console.log('Write completed.');
-										   };
-										   fileWriter.onerror = function (e) {
-										   console.log('Write failed: ' + e.toString());
-										   };
-										   // Create a new Blob and write it to log.txt.
-										   var bb = new Blob([cont]);
-										   fileWriter.write(bb);
-										   }, errorHandler);
-					}, errorHandler);
-}
-
-function foo() {
-	for (i = 0; i < 5; i++) {
-		setTimeout(function () { // // it works, BTW: Why it didn't write the num in ascending order as expected
-				   (function (x) {
-					receiveFile(x);
-					})(i)
-				   }, i * 1000);
-				   //receiveFile(i); // didn't work, just write once
+function buildStr(val){
+	
+	var str = "";
+	for(i = val; i > 0; i--){
+		str += (i.toString() + " bottles of beer on the wall. ");
+		str += (i.toString() + " bottles of beer on the wall. ");
+		str += ("Take one down pass it around, " + (i - 1).toString() + " bottles of beer on the wall. ");
 	}
+	return str;
+	
 }
 
-window.addEventListener("load", initFS, false);
+function methodOne(){
+	
+//	window.open('data:application/text;charset=utf-8,' + 'Hello World!');
+//	window.open("data:application/text;charset=utf-8,Hello World!");
+	str = buildStr(100);
 
-</script>
-<input type="button" onclick="action();" value="Do It!">
+	window.open("data:text/plain;charset=utf-8," + str);
+
+}
+
+function methodTwo(){
+	var typedArray = "Hello World!;";
+	var blobObj = new Blob([typedArray], {type: 'application/text'});
+	var urlObj = URL.createObjectURL(blobObj);
+	var vObj = document.getElementById("exportButton");
+
+
+	var aObj = document.createElement("a");
+	aObj.href = urlObj;
+	window.open(blobObj);
+	aObj.download = "Example.txt";
+	aObj.click();
+
+}
+
+function methodThr(){
+	var typedArray = "Hello World!;";
+	var blobObj = new Blob([typedArray], {type: 'application/text'});
+	var urlObj = URL.createObjectURL(blobObj);
+	var vObj = document.getElementById("exportButton");
+	
+	
+	var aObj = document.createElement("a");
+//	aObj.href = "data:application/text;charset=utf-8," + encodeURIComponent("Hello World!");
+//	window.open(blobObj);
+	aObj.href = "data:application/text;charset=utf-8,Hello World!";
+
+	aObj.download = "Example.txt";
+	aObj.click();
+	
+}
+
+function action(){
+	methodOne();
+	
+	
+	
+}
+
+
+		</script>
+
+
+
+		<input type="button" onclick="action();" value="Do It!" id="exportButton">
+
+	</body>
+</html>
