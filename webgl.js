@@ -5,7 +5,10 @@ var gl;
 var vbVertexBuffer, vbNormalBuffer;
 
 var objRender = new Geom();
+
+/*
 objRender.data_type = WebGLRenderingContext.TRIANGLE_STRIP;
+
 objRender.vertex_data = [
 				 // front face
 				 -0.5, -0.5, 0.5,
@@ -71,41 +74,309 @@ objRender.normal_data = [
 				-1.0, 0.0, 0.0
 				
 				];
+*/
 
-var v3translate = [0.0, 0.0, 0.0];
+objRender.data_type = WebGLRenderingContext.TRIANGLES;
 
+objRender.vertex_data = [
+/*
+						 // front face
+						 -0.5,-0.5, 0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5,-0.5, 0.5,
+						  0.5,-0.5, 0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5, 0.5, 0.5,
+						 // back face
+						 -0.5,-0.5,-0.5,
+						  0.5,-0.5,-0.5,
+						 -0.5, 0.5,-0.5,
+						 -0.5, 0.5,-0.5,
+						  0.5,-0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						 
+						 // up face
+						 -0.5, 0.5,-0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5, 0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5, 0.5, 0.5,
+						 // down face
+						 -0.5,-0.5,-0.5,
+						  0.5,-0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						 -0.5,-0.5, 0.5,
+						  0.5,-0.5,-0.5,
+						  0.5,-0.5, 0.5,
 
+						 // right face
+						  0.5,-0.5,-0.5,
+						  0.5,-0.5, 0.5,
+						  0.5, 0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						  0.5,-0.5, 0.5,
+						  0.5, 0.5, 0.5,
+						 // left face
+						 -0.5,-0.5,-0.5,
+						 -0.5, 0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						 -0.5,-0.5, 0.5,
+						 -0.5, 0.5,-0.5,
+						 -0.5, 0.5, 0.5
+*/
+/*
+						 // front face
+						 -0.5,-0.5, 0.5,
+						  0.5,-0.5, 0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5,-0.5, 0.5,
+						  0.5, 0.5, 0.5,
+						 -0.5, 0.5, 0.5,
 
+						 // back face
+						 -0.5,-0.5,-0.5,
+						 -0.5, 0.5,-0.5,
+						  0.5,-0.5,-0.5,
+						 -0.5, 0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						  0.5,-0.5,-0.5,
+						 
+						 // up face
+						 -0.5, 0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						 -0.5, 0.5, 0.5,
+						  0.5, 0.5,-0.5,
+						  0.5, 0.5, 0.5,
+						 -0.5, 0.5, 0.5,
+
+						 // down face
+						 -0.5,-0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						  0.5,-0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						  0.5,-0.5, 0.5,
+						  0.5,-0.5,-0.5,
+						 
+						 // right face
+						  0.5,-0.5,-0.5,
+						  0.5, 0.5,-0.5,
+						  0.5,-0.5, 0.5,
+						  0.5, 0.5,-0.5,
+						  0.5, 0.5, 0.5,
+						  0.5,-0.5, 0.5,
+
+						 // left face
+						 -0.5,-0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						 -0.5, 0.5,-0.5,
+						 -0.5,-0.5, 0.5,
+						 -0.5, 0.5, 0.5,
+						 -0.5, 0.5,-0.5
+*/
+///*
+						 // front face
+						 -1.0,-1.0, 1.0,
+						 -1.0, 1.0, 1.0,
+						  1.0,-1.0, 1.0,
+						  1.0,-1.0, 1.0,
+						 -1.0, 1.0, 1.0,
+						  1.0, 1.0, 1.0,
+						 // back face
+						 -1.0,-1.0,-1.0,
+						  1.0,-1.0,-1.0,
+						 -1.0, 1.0,-1.0,
+						 -1.0, 1.0,-1.0,
+						  1.0,-1.0,-1.0,
+						  1.0, 1.0,-1.0,
+						 
+						 // up face
+						 -1.0, 1.0,-1.0,
+						 -1.0, 1.0, 1.0,
+						  1.0, 1.0,-1.0,
+						  1.0, 1.0,-1.0,
+						 -1.0, 1.0, 1.0,
+						  1.0, 1.0, 1.0,
+						 // down face
+						 -1.0,-1.0,-1.0,
+						  1.0,-1.0,-1.0,
+						 -1.0,-1.0, 1.0,
+						 -1.0,-1.0, 1.0,
+						  1.0,-1.0,-1.0,
+						  1.0,-1.0, 1.0,
+						 
+						 // right face
+						  1.0,-1.0,-1.0,
+						  1.0,-1.0, 1.0,
+						  1.0, 1.0,-1.0,
+						  1.0, 1.0,-1.0,
+						  1.0,-1.0, 1.0,
+						  1.0, 1.0, 1.0,
+						 // left face
+						 -1.0,-1.0,-1.0,
+						 -1.0, 1.0,-1.0,
+						 -1.0,-1.0, 1.0,
+						 -1.0,-1.0, 1.0,
+						 -1.0, 1.0,-1.0,
+						 -1.0, 1.0, 1.0
+//*/
+						 ];
+
+objRender.normal_data = [
+/*
+						 // front face
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						 // back face
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+
+						 // up face
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						 // down face
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+
+						 // right face
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 // left face
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0
+*/
+
+						 // front face
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						  0.0, 0.0, 1.0,
+						 // back face
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+						  0.0, 0.0,-1.0,
+
+						 // up face
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						  0.0, 1.0, 0.0,
+						 // down face
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						  0.0,-1.0, 0.0,
+						 
+						 // right face
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						  1.0, 0.0, 0.0,
+						 // left face
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0,
+						 -1.0, 0.0, 0.0
+						 
+						 ];
+
+/*
+	Based on code from:
+		http://learningwebgl.com/blog/?p=684
+*/
 var sVs =
+"varying highp vec3 vLightWeighting;" +
 "attribute vec3 aPos;" +
 "attribute vec3 aNorm;" +
-"uniform vec3 uTrans;" +
-"uniform vec3 uRotn;" +
+"uniform vec3 uLight;" +
+"uniform vec3 uColor;" +
 "uniform mat4 uProj;" +
 "uniform mat4 uMove;" +
-"varying lowp vec3 vDummy;" +
+"uniform mat4 uNorm;" +
+"uniform mat4 uChange;" +
 "void main() {" +
-"	gl_Position = vec4(aPos, 1.0) + vec4(uTrans, 0.0);" +
 "	gl_Position = uProj * uMove * vec4(aPos, 1.0) ; " +
-"	vDummy = aNorm;" +
+"	highp vec4 v4LightPos = uMove * vec4(aPos, 1.0) ; " +
+"	gl_Position = uChange * uProj * uMove * vec4(aPos, 1.0) ; " +
+"	vec4 vTransformedNormal = uNorm * vec4(aNorm, 1.0) ; " +
+"	highp vec3 vDirectional = 1.0*(uLight - v4LightPos.xyz) ; " +
+"	highp float fWeighting = max(dot(normalize(vTransformedNormal.xyz), normalize(vDirectional)),0.0) ; " +
+"	vLightWeighting = uColor*0.5 + uColor * fWeighting ; " +
 "}";
 
 var sFs =
-"varying lowp vec3 vDummy;" +
+"varying highp vec3 vLightWeighting;" +
 "void main() {" +
 "	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);" +
-"	lowp vec3 vNew = vec3(1.0, 1.0, 1.0);" +
+"	highp vec3 vNew = vec3(1.0, 1.0, 1.0);" +
+"	gl_FragColor = vec4(vLightWeighting, 1.0);" +
 "}";
 
 
 var vs, fs;
 var shaderProgram;
-var pos, norm;
+var aPos, aNorm;
 var pMatrix, mvMatrix;
 var uProj, uMove;
 var tMatrix, tempMatrix;
+var normMatrix;
+var uNorm, uLight, uPos;
+var uChange;
+
+var v3light = [0.0, 0.0, 5.0];
+var v3color = [0.0, 1.0, 0.0];
+var v3translate = [0.0, 0.0, -5.0];
+var m4change =
+				[-1.0, 0.0, 0.0, 0.0,
+				  0.0,-1.0, 0.0, 0.0,
+				  0.0, 0.0,-1.0, 0.0,
+				  0.0, 0.0, 0.0, 1.0];
+var m4identity =
+				[ 1.0, 0.0, 0.0, 0.0,
+				  0.0, 1.0, 0.0, 0.0,
+				  0.0, 0.0, 1.0, 0.0,
+				  0.0, 0.0, 0.0, 1.0];
+
+
 function mouseMovement(e){
-	var fSwitch = -1.0;
+	var fSwitch = 5.0;
 /*
 	'fSwitch' dictates movement of 'v3translate' vector based upon matrix mordering
 		fSwitch = -1.0 when gl_Position = uProj * uMove * vec4(aPos, 1.0) ;
@@ -114,41 +385,48 @@ function mouseMovement(e){
 */
 	var clientCenterX = canvas.clientWidth/2;
 	var clientCenterY = canvas.clientHeight/2;
-	v3translate[0] = (e.clientX - this.offsetLeft - clientCenterX)/clientCenterX * fSwitch;
-	v3translate[1] = (clientCenterY - e.clientY + this.offsetTop)/clientCenterY * fSwitch;
-	v3translate[2] = 0;
-	//	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1]);
-	mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
+	v3translate[0] = ((e.clientX - this.offsetLeft) - clientCenterX)/clientCenterX * fSwitch;		// is LR
+	v3translate[1] = (clientCenterY - (e.clientY - this.offsetTop))/clientCenterY * fSwitch;		// is TD
+//	v3translate[2] = ((e.clientY  - this.offsetTop) - clientCenterY)*0.1;
+	
+//	v3translate[2] = 0;
+
 
 	draw();
 	
 }
 
+
+
 function draw() {
+
+	mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
+//	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1] + ' ; v3translate[2] = ' + v3translate[2]);
 	
-	gl.clearColor(0, 0.0, 0.0, 1);
+	
+//	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	
-	
-	
-	
+
  
 	gl.useProgram(shaderProgram);
 	
-	gl.uniform3fv(trans,v3translate);
+
+//	tMatrix = mat3.normalFromMat4(mat3.create(), mvMatrix);
+	normMatrix = mat4FromMat3(mat4.create(), mat3.normalFromMat4(mat3.create(), mvMatrix));
 	
-/*
-	tempMatrix = mat3.create();
-	tempMatrix = mat3.normalFromMat4(tempMatrix,pMatrix);
-	tMatrix = mat4.create();
-	tMatrix = mat4FromMat3(tMatrix, tempMatrix);
-	tMatrix = mat4.transpose(tMatrix, pMatrix);
-*/	
-	tMatrix = mat4.transpose(mat4.create(), pMatrix);
+//	tMatrix = mat4.transpose(mat4.create(), pMatrix);
+//	tMatrix = mat4FromMat3(mat4.create(), mat3.normalFromMat4(mat3.create(), mvMatrix));
 	
-	gl.uniformMatrix4fv(uProj,false,tMatrix);
+	
+	gl.uniform3fv(uLight,v3light);
+	gl.uniform3fv(uColor,v3color);
+	
+	gl.uniformMatrix4fv(uProj,false,pMatrix);
 	gl.uniformMatrix4fv(uMove,false,mvMatrix);
+	gl.uniformMatrix4fv(uNorm,false,normMatrix);
+
+	gl.uniformMatrix4fv(uChange,false,m4identity);
 	
 	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
 }
@@ -162,20 +440,29 @@ function initGL() {
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
 		
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clearDepth(20.0);
+//		gl.depthMask(true);
+		gl.enable(gl.BLEND);
+		gl.enable(gl.DEPTH_TEST);
+		gl.depthFunc(gl.LEQUAL);
+//		gl.depthFunc(gl.NONE);
+
+//		gl.depthFunc(gl.LESS);
+//		gl.disable(gl.DEPTH_TEST);
 		
 		canvas.addEventListener( 'mousemove', mouseMovement, false );
 		
+		mvMatrix = mat4.create();
+		mvMatrix = mat4.identity(mvMatrix);
+		mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
+		
 		pMatrix = mat4.create();
 		pMatrix = mat4.identity(pMatrix);
-		pMatrix = mat4.perspective(pMatrix, 30, gl.viewportWidth / gl.viewportHeight, 5.0, -5.0);
+		pMatrix = mat4.perspective(pMatrix, Math.PI/180.0*90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 5.01);
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 
-		mvMatrix = mat4.create();
-		mvMatrix = mat4.identity(mat4.create());
-		mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
-		
-		
 		
 	} catch(e) {
 		
@@ -216,6 +503,8 @@ function initShaders(){
 	// send shader program to GPU
 	gl.linkProgram(shaderProgram);
 	
+	// tell what shder program on the GPU to use
+	gl.useProgram(shaderProgram);
 	
 }
 
@@ -233,11 +522,13 @@ function initBuffers(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
-	pos = gl.getAttribLocation(shaderProgram, "aPos");
-	// enable addtribute variable (pos) when rendering
-	gl.enableVertexAttribArray(pos);
-	// specifies location (attr) of current vertex attributes (vbVertexBuffer)
-	gl.vertexAttribPointer(pos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	aPos = gl.getAttribLocation(shaderProgram, "aPos");
+	// enable addtribute variable (aPos) when rendering
+	gl.enableVertexAttribArray(aPos);
+	// specifies location (aPos) of current vertex attributes (vbVertexBuffer)
+	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
+
 	
 	
 	
@@ -250,23 +541,26 @@ function initBuffers(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aNorm) to it
-	norm = gl.getAttribLocation(shaderProgram, "aNorm");
-	// enable addtribute variable (norm) when rendering
-	gl.enableVertexAttribArray(norm);
-	// specifies location (attr) of current vertex attributes (vbVertexBuffer)
-	gl.vertexAttribPointer(norm, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	aNorm = gl.getAttribLocation(shaderProgram, "aNorm");
+	// enable addtribute variable (aNorm) when rendering
+	gl.enableVertexAttribArray(aNorm);
+	// specifies location (aNorm) of current vertex attributes (vbVertexBuffer)
+	gl.vertexAttribPointer(aNorm, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	
+	
+	
+	
+	
+	// create UNIFORM variable, and assign shader uniform (uLight) to it
+	uLight = gl.getUniformLocation(shaderProgram, "uLight");
+	uColor = gl.getUniformLocation(shaderProgram, "uColor");
 
-	// Make vertex buffer (vbVertexBuffer) active
-	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
-	// Bind (Float32 converted) vertex array (vertices) to active vertex buffer (vbVertexBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
-	
-	
-	// create UNIFORM variable, and assign shader uniform (uTrans) to it
-	trans = gl.getUniformLocation(shaderProgram, "uTrans");
-	
+	// create UNIFORM variable, and assign shader uniform (uProj, uMove, and uNorm) to it
 	uProj = gl.getUniformLocation(shaderProgram, "uProj");
 	uMove = gl.getUniformLocation(shaderProgram, "uMove");
+	uNorm = gl.getUniformLocation(shaderProgram, "uNorm");
+	uChange = gl.getUniformLocation(shaderProgram, "uChange");
+	
 	
 }
 
