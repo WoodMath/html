@@ -46,13 +46,13 @@ function Geom(){
 
 Geom.prototype.data_type;
 /*
-	POINTS				= 0x0000;
-	LINES				= 0x0001;
-	LINE_LOOP			= 0x0002;
-	LINE_STRIP			= 0x0003;
-	TRIANGLES			= 0x0004;
-	TRIANGLE_STRIP		= 0x0005;
-	TRIANGLE_FAN		= 0x0006;
+	WebGLRenderingContext.POINTS			= 0x0000;
+	WebGLRenderingContext.LINES				= 0x0001;
+	WebGLRenderingContext.LINE_LOOP			= 0x0002;
+	WebGLRenderingContext.LINE_STRIP		= 0x0003;
+	WebGLRenderingContext.TRIANGLES			= 0x0004;
+	WebGLRenderingContext.TRIANGLE_STRIP	= 0x0005;
+	WebGLRenderingContext.TRIANGLE_FAN		= 0x0006;
 */
 Geom.prototype.vertex_data;
 Geom.prototype.normal_data;
@@ -93,6 +93,12 @@ Geom.prototype.evaluate = function(
 			}
 			
 		}
+	
+	var rtrn = new Geom();
+	
+	rtrn.vertex_data = vertex_array;
+	rtrn.normal_data = normal_array;
+	
 	
 	
 }

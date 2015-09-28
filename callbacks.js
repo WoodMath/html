@@ -59,14 +59,27 @@ function torus(				//  creates a torus lying on the XZ-plane
 	var f3Normal = new Vector3d(0.0, 0.0, 0.0);
 	
 	//	V-parameter will begin in inner radius, wrap to outer radius, and return back to inner radius
-	var fRadiusToBeRotated = fRadiusMinor * Math.cos((vParam - 180) * Math.PI / 180.0) + fRadiusMajor;
+	var fPositionRadiusToBeRotated = fRadiusMinor * Math.cos((vParam - 180) * Math.PI / 180.0) + fRadiusMajor;
 	f3Position.y = fRadiusMinor * Math.sin((vParam - 180) * Math.PI / 180.0);
 
 	//	U-parameter will wrap around circumfrence of Torus
-	f3Position.x = fRadiusToBeRotated * Math.cos(uParam * Math.PI / 180.0);
-	f3Position.z = fRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
+	f3Position.x = fPositionRadiusToBeRotated * Math.cos(uParam * Math.PI / 180.0);
+	f3Position.z = fPositionRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
+
 	
-	return f3Position ;
+	//	V-parameter will begin in inner radius, wrap to outer radius, and return back to inner radius
+	var fNormalRadiusToBeRotated = 1.0 * Math.cos((vParam - 180) * Math.PI / 180.0) + 0.0;
+	f3Normal.y = 1.0 * Math.sin((vParam - 180) * Math.PI / 180.0);
+	
+	//	U-parameter will wrap around circumfrence of Torus
+	f3Normal.x = fRadiusToBeRotated * Math.cos(uParam * Math.PI / 180.0);
+	f3Normal.z = fRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
+
+	f3Normal = f3Normal.normalize();
+	
+	var f3Surface = new Surface3d(f3Position,f3Normal);
+	
+	return f3Surface;
 
 
 }
