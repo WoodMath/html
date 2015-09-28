@@ -533,7 +533,7 @@ function initBuffers(){
 	
 	
 	vbNormalBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
-	vbNormalBuffer.itemSize = 3;	// 3 elements in size each
+	vbNormalBuffer.itemSize = 3;						// 3 elements in size each
 	
 	// Make vertex buffer (vbNormalBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
@@ -581,6 +581,54 @@ function resetAll(){
 	initShaders();
 	initBuffers();
 	draw();
+	
+}
+
+function loadParametric(sFunction){
+	var obj = new Geom();
+
+/*
+	Implementing callbacks based on
+		https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes/Using_js-ctypes/Declaring_and_Using_Callbacks
+ 
+*/
+	if(sFunction === "sphere")
+		obj.evaluate(
+			sphere,							// callback
+			0.0, 360.0, 5.0,				// U-Parameterization (Min, Max, Step)	(Longitude)
+			0.0, 180.0, 5.0,				// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
+			1.0, "empty"					// function parameters (radius and dummy)
+		);
+
+	if(sFunction === "torus")
+		obj.evaluate(
+			torus,							// callback
+			0.0, 360.0, 5.0,				// U-Parameterization (Min, Max, Step)	(Along the tube)
+			0.0, 360.0, 5.0,				// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
+			1.0, 2.0						// function parameters (radius and dummy)
+		 );
+	
+	if(sFunction === "square")
+		obj.evaluate(
+			square,							// callback
+			0.0, 1.0, 0.1,					// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
+			0.0, 1.0, 0.1,					// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
+			-0.5, 0.5						// function parameters (starting from and stopping at)
+		);
+
+	if(sFUnction === "box")
+		obj.evaluate(
+			box,							// callback
+			0.0, 1.0, 0.1*(1.0/4.0),		// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
+			0.0, 1.0, 0.1*(1.0/3.0),		// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
+			1.0, -1.0/2.0					// function parameters (size and centerinf offset)
+		);
+
+	objRender = obj;
+	resetBuffers();
+	initBuffers();
+	draw();
+	
 	
 }
 

@@ -1,3 +1,9 @@
+/*
+	Based upon code from discussions at:
+		http://stackoverflow.com/questions/12889362/difference-between-id-and-class-in-css-and-when-to-use-it
+		http://stackoverflow.com/questions/1397592/difference-between-id-and-name-attributes-in-html
+*/
+
 body {
 /*	background:#000; */
 	color:#000;
@@ -44,9 +50,10 @@ file {
 	text-align:left;
 	z-index:1000;
 	width: 600px;
+	vertical-align: top;
 }
 
-table{
+ktable{
 	padding: 0px;
 	margin-left: 20px;
 	margin-right: 20px;
