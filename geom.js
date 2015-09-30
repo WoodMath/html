@@ -15,6 +15,7 @@ function Vector3d(x,y,z){
 	this.arrayForm[0] = this.x;
 	this.arrayForm[1] = this.y;
 	this.arrayForm[2] = this.z;
+	return this;
 	
 };
 
@@ -24,7 +25,7 @@ Vector3d.prototype.magnitude = function() {
 
 Vector3d.prototype.normalize = function(){
 	var fTemp = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-	return Vector3d(this.x / fTemp, this.y / fTemp, this.z / fTemp);
+	return new Vector3d(this.x / fTemp, this.y / fTemp, this.z / fTemp);
 };
 
 Vector3d.prototype.updateArrayForm = function(){
@@ -41,23 +42,23 @@ function Surface3d(position, normal){
 }
 
 function Geom(){
-
+	this.data_type = undefined;
+	/*
+	 WebGLRenderingContext.POINTS			= 0x0000;
+	 WebGLRenderingContext.LINES			= 0x0001;
+	 WebGLRenderingContext.LINE_LOOP		= 0x0002;
+	 WebGLRenderingContext.LINE_STRIP		= 0x0003;
+	 WebGLRenderingContext.TRIANGLES		= 0x0004;
+	 WebGLRenderingContext.TRIANGLE_STRIP	= 0x0005;
+	 WebGLRenderingContext.TRIANGLE_FAN		= 0x0006;
+	 */
+	this.vertex_data = [];
+	this.normal_data = [];
+	return this;
 };
 
-Geom.prototype.data_type;
-/*
-	WebGLRenderingContext.POINTS			= 0x0000;
-	WebGLRenderingContext.LINES				= 0x0001;
-	WebGLRenderingContext.LINE_LOOP			= 0x0002;
-	WebGLRenderingContext.LINE_STRIP		= 0x0003;
-	WebGLRenderingContext.TRIANGLES			= 0x0004;
-	WebGLRenderingContext.TRIANGLE_STRIP	= 0x0005;
-	WebGLRenderingContext.TRIANGLE_FAN		= 0x0006;
-*/
-Geom.prototype.vertex_data;
-Geom.prototype.normal_data;
+
 Geom.prototype.numVectors = function(){
-	
 	
 	if(this.vertex_data.length % 3)
 		return -1;			// does not contain 3-vectors;
@@ -68,9 +69,6 @@ Geom.prototype.numVectors = function(){
 	return (this.vertex_data.length / 3);
 	
 }
-
-
-
 
 Geom.prototype.evaluate = function(
 //	vertex_array, normal_array,			// arrays to store output
@@ -94,11 +92,8 @@ Geom.prototype.evaluate = function(
 			
 		}
 	
-	var rtrn = new Geom();
-	
-	rtrn.vertex_data = vertex_array;
-	rtrn.normal_data = normal_array;
-	
-	
+	this.data_type = WebGLRenderingContext.TRIANGLES;
+	this.vertex_data = vertex_array;
+	this.normal_data = normal_array;
 	
 }

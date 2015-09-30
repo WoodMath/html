@@ -72,8 +72,8 @@ function torus(				//  creates a torus lying on the XZ-plane
 	f3Normal.y = 1.0 * Math.sin((vParam - 180) * Math.PI / 180.0);
 	
 	//	U-parameter will wrap around circumfrence of Torus
-	f3Normal.x = fRadiusToBeRotated * Math.cos(uParam * Math.PI / 180.0);
-	f3Normal.z = fRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
+	f3Normal.x = fNormalRadiusToBeRotated * Math.cos(uParam * Math.PI / 180.0);
+	f3Normal.z = fNormalRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
 
 	f3Normal = f3Normal.normalize();
 	
@@ -168,9 +168,9 @@ function cube(			//  creates a box based on UV-parameterization of cube
 
 	
 	if((2.0 / 3.0) <= vParam && vParam <= (3.0 / 3.0)){		// UV is on Up face
-		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
+		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
 		f3Position.y = (1.0 / 1.0) * fSize + fOffset;
-		f3Position.z = (0.0 + ((vParam - (2.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
+		f3Position.z = (0.0 + ((vParam - (2.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
 
 		(f3Normal.y)++;					// See (*) below
 		if(uParam == (1.0/4.0))			// See (**) below
@@ -185,8 +185,8 @@ function cube(			//  creates a box based on UV-parameterization of cube
 	if((1.0 / 3.0) <= vParam && vParam <= (2.0 / 3.0)){		// UV is on one of the middle faces
 		if((0.0 / 4.0) <= uParam && uParam <= (1.0 / 4.0)){	// UV is on Left face
 			f3Position.x = (1.0 / 1.0) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
-			f3Position.z = (1.0 - ((uParam - (0.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+			f3Position.z = (1.0 - ((uParam - (0.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
 
 			(f3Normal.x)++;				// See (*) below
 			if(uParam == (0.0/4.0))		// See (**) below
@@ -200,8 +200,8 @@ function cube(			//  creates a box based on UV-parameterization of cube
 		}
 		
 		if((1.0 / 4.0) <= uParam && uParam <= (2.0 / 4.0)){	// UV is on Front face
-			f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
+			f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
 			f3Position.z = (0.0 / 1.0) * fSize + fOffset;
 
 			(f3Normal.z)--;				// See (*) below
@@ -209,8 +209,8 @@ function cube(			//  creates a box based on UV-parameterization of cube
 		
 		if((2.0 / 4.0) <= uParam && uParam <= (3.0 / 4.0)){	// UV is on Right face
 			f3Position.x = (0.0 / 1.0) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
-			f3Position.z = (0.0 + ((uParam - (2.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+			f3Position.z = (0.0 + ((uParam - (2.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
 
 			(f3Normal.x)--;				// See (*) below
 			if(vParam == (1.0/3.0))		// See (**) below
@@ -220,8 +220,8 @@ function cube(			//  creates a box based on UV-parameterization of cube
 		}
 		
 		if((3.0 / 4.0) <= uParam && uParam <= (4.0 / 4.0)){	// UV is on Back face
-			f3Position.x = (0.0 + ((uParam - (3.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
+			f3Position.x = (0.0 + ((uParam - (3.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
 			f3Position.z = (1.0 / 1.0) * fSize + fOffset;
 
 			(f3Normal.z)++;				// See (*) below
@@ -237,9 +237,9 @@ function cube(			//  creates a box based on UV-parameterization of cube
 	}
 	
 	if((0.0 / 3.0) <= vParam && vParam <= (1.0 / 3.0)){		// UV is on down Face
-		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0)))) * fSize + fOffset;
+		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
 		f3Position.y = (0.0 / 1.0) *fSize + fOffset;
-		f3Position.z = (1.0 - ((vParam - (0.0/3.0)) / (1.0/3.0)))) * fSize + fOffset;
+		f3Position.z = (1.0 - ((vParam - (0.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
 
 		(f3Normal.y)--;					// See (*) below
 		if(uParam == (1.0/4.0))			// See (**) below
