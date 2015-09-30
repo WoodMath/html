@@ -52,8 +52,14 @@ function Geom(){
 	 WebGLRenderingContext.TRIANGLE_STRIP	= 0x0005;
 	 WebGLRenderingContext.TRIANGLE_FAN		= 0x0006;
 	 */
-	this.vertex_data = [];
-	this.normal_data = [];
+	this.vertex_data = [];		//	Assumes this.data_type = WebGLRenderingContext.TRIANGLES
+	this.normal_data = [];		//	Assumes this.data_type = WebGLRenderingContext.TRIANGLES
+	
+	// The following code is not implemented
+	// is only included to highlight differences of
+	this.vertex_indices = [];	//	If 'this.vertex_data' needs indices, Then 'this.vertex_indices' provides it, Else 'this.vertex_indices' is meaningless
+	this.normal_indices = [];	//	If 'this.normal_data' needs indices, Then 'this.normal_indices' provides it, Else 'this.normal_indices' is meaningless
+	
 	return this;
 };
 

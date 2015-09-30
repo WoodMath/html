@@ -3,186 +3,23 @@ var gl;
 
 
 var vbVertexBuffer, vbNormalBuffer;
+var ibVertexBuffer, ibNormalBuffer;
 
 var objRender = new Geom();
 
-/*
-objRender.data_type = WebGLRenderingContext.TRIANGLE_STRIP;
 
-objRender.vertex_data = [
-				 // front face
-				 -0.5,-0.5, 0.5,
-				  0.5,-0.5, 0.5,
-				 -0.5, 0.5, 0.5,
-				  0.5, 0.5, 0.5,
-				 
-				 // up face
-				 -0.5, 0.5,-0.5,
-				  0.5, 0.5,-0.5,
-				 
-				 // right face
-				  0.5, 0.5, 0.5,
-				  0.5,-0.5,-0.5,
-				  0.5,-0.5, 0.5,
-				 
-				 // down face
-				 -0.5,-0.5, 0.5,
-				  0.5,-0.5,-0.5,
-				 -0.5,-0.5,-0.5,
-				 
-				 // back face
-				  0.5, 0.5,-0.5,
-				 -0.5, 0.5,-0.5,
-				 -0.5,-0.5,-0.5,
-				 
-				 // left face
-				 -0.5,-0.5, 0.5,
-				 -0.5, 0.5,-0.5,
-				 -0.5, 0.5, 0.5
-				 
-				 ];
-
-objRender.normal_data = [
-				// front face
-				0.0, 0.0, 1.0,
-				0.0, 0.0, 1.0,
-				0.0, 0.0, 1.0,
-				0.0, 0.0, 1.0,
-				
-				// up face
-				0.0, 1.0, 0.0,
-				0.0, 1.0, 0.0,
-				
-				// right face
-				1.0, 0.0, 0.0,
-				1.0, 0.0, 0.0,
-				1.0, 0.0, 0.0,
-				
-				// down face
-				0.0,-1.0, 0.0,
-				0.0,-1.0, 0.0,
-				0.0,-1.0, 0.0,
-				
-				// back face
-				0.0, 0.0,-1.0,
-				0.0, 0.0,-1.0,
-				0.0, 0.0,-1.0,
-				
-				// left face
-				-1.0, 0.0, 0.0,
-				-1.0, 0.0, 0.0,
-				-1.0, 0.0, 0.0
-				
-				];
-*/
 
 objRender.data_type = WebGLRenderingContext.TRIANGLES;
 
 objRender.vertex_data = [
-/*
-						 // front face
-						 -0.5,-0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5,-0.5, 0.5,
-						  0.5,-0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5, 0.5, 0.5,
-						 // back face
-						 -0.5,-0.5,-0.5,
-						  0.5,-0.5,-0.5,
-						 -0.5, 0.5,-0.5,
-						 -0.5, 0.5,-0.5,
-						  0.5,-0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						 
-						 // up face
-						 -0.5, 0.5,-0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5, 0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5, 0.5, 0.5,
-						 // down face
-						 -0.5,-0.5,-0.5,
-						  0.5,-0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						 -0.5,-0.5, 0.5,
-						  0.5,-0.5,-0.5,
-						  0.5,-0.5, 0.5,
-
-						 // right face
-						  0.5,-0.5,-0.5,
-						  0.5,-0.5, 0.5,
-						  0.5, 0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						  0.5,-0.5, 0.5,
-						  0.5, 0.5, 0.5,
-						 // left face
-						 -0.5,-0.5,-0.5,
-						 -0.5, 0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						 -0.5,-0.5, 0.5,
-						 -0.5, 0.5,-0.5,
-						 -0.5, 0.5, 0.5
-*/
-/*
-						 // front face
-						 -0.5,-0.5, 0.5,
-						  0.5,-0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5,-0.5, 0.5,
-						  0.5, 0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-
-						 // back face
-						 -0.5,-0.5,-0.5,
-						 -0.5, 0.5,-0.5,
-						  0.5,-0.5,-0.5,
-						 -0.5, 0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						  0.5,-0.5,-0.5,
-						 
-						 // up face
-						 -0.5, 0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						 -0.5, 0.5, 0.5,
-						  0.5, 0.5,-0.5,
-						  0.5, 0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-
-						 // down face
-						 -0.5,-0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						  0.5,-0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						  0.5,-0.5, 0.5,
-						  0.5,-0.5,-0.5,
-						 
-						 // right face
-						  0.5,-0.5,-0.5,
-						  0.5, 0.5,-0.5,
-						  0.5,-0.5, 0.5,
-						  0.5, 0.5,-0.5,
-						  0.5, 0.5, 0.5,
-						  0.5,-0.5, 0.5,
-
-						 // left face
-						 -0.5,-0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						 -0.5, 0.5,-0.5,
-						 -0.5,-0.5, 0.5,
-						 -0.5, 0.5, 0.5,
-						 -0.5, 0.5,-0.5
-*/
-///*
-						 // front face
+						 // Front face
 						 -1.0,-1.0, 1.0,
 						 -1.0, 1.0, 1.0,
 						  1.0,-1.0, 1.0,
 						  1.0,-1.0, 1.0,
 						 -1.0, 1.0, 1.0,
 						  1.0, 1.0, 1.0,
-						 // back face
+						 // Back face
 						 -1.0,-1.0,-1.0,
 						  1.0,-1.0,-1.0,
 						 -1.0, 1.0,-1.0,
@@ -197,7 +34,7 @@ objRender.vertex_data = [
 						  1.0, 1.0,-1.0,
 						 -1.0, 1.0, 1.0,
 						  1.0, 1.0, 1.0,
-						 // down face
+						 // Down face
 						 -1.0,-1.0,-1.0,
 						  1.0,-1.0,-1.0,
 						 -1.0,-1.0, 1.0,
@@ -205,79 +42,31 @@ objRender.vertex_data = [
 						  1.0,-1.0,-1.0,
 						  1.0,-1.0, 1.0,
 						 
-						 // right face
+						 // Right face
 						  1.0,-1.0,-1.0,
 						  1.0,-1.0, 1.0,
 						  1.0, 1.0,-1.0,
 						  1.0, 1.0,-1.0,
 						  1.0,-1.0, 1.0,
 						  1.0, 1.0, 1.0,
-						 // left face
+						 // Left face
 						 -1.0,-1.0,-1.0,
 						 -1.0, 1.0,-1.0,
 						 -1.0,-1.0, 1.0,
 						 -1.0,-1.0, 1.0,
 						 -1.0, 1.0,-1.0,
 						 -1.0, 1.0, 1.0
-//*/
 						 ];
 
 objRender.normal_data = [
-/*
-						 // front face
-						  0.0, 0.0,-1.0,
-						  0.0, 0.0,-1.0,
-						  0.0, 0.0,-1.0,
-						  0.0, 0.0,-1.0,
-						  0.0, 0.0,-1.0,
-						  0.0, 0.0,-1.0,
-						 // back face
+						 // Front face
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
-
-						 // up face
-						  0.0,-1.0, 0.0,
-						  0.0,-1.0, 0.0,
-						  0.0,-1.0, 0.0,
-						  0.0,-1.0, 0.0,
-						  0.0,-1.0, 0.0,
-						  0.0,-1.0, 0.0,
-						 // down face
-						  0.0, 1.0, 0.0,
-						  0.0, 1.0, 0.0,
-						  0.0, 1.0, 0.0,
-						  0.0, 1.0, 0.0,
-						  0.0, 1.0, 0.0,
-						  0.0, 1.0, 0.0,
-
-						 // right face
-						 -1.0, 0.0, 0.0,
-						 -1.0, 0.0, 0.0,
-						 -1.0, 0.0, 0.0,
-						 -1.0, 0.0, 0.0,
-						 -1.0, 0.0, 0.0,
-						 -1.0, 0.0, 0.0,
-						 // left face
-						  1.0, 0.0, 0.0,
-						  1.0, 0.0, 0.0,
-						  1.0, 0.0, 0.0,
-						  1.0, 0.0, 0.0,
-						  1.0, 0.0, 0.0,
-						  1.0, 0.0, 0.0
-*/
-
-						 // front face
-						  0.0, 0.0, 1.0,
-						  0.0, 0.0, 1.0,
-						  0.0, 0.0, 1.0,
-						  0.0, 0.0, 1.0,
-						  0.0, 0.0, 1.0,
-						  0.0, 0.0, 1.0,
-						 // back face
+						 // Back face
 						  0.0, 0.0,-1.0,
 						  0.0, 0.0,-1.0,
 						  0.0, 0.0,-1.0,
@@ -285,14 +74,14 @@ objRender.normal_data = [
 						  0.0, 0.0,-1.0,
 						  0.0, 0.0,-1.0,
 
-						 // up face
+						 // Up face
 						  0.0, 1.0, 0.0,
 						  0.0, 1.0, 0.0,
 						  0.0, 1.0, 0.0,
 						  0.0, 1.0, 0.0,
 						  0.0, 1.0, 0.0,
 						  0.0, 1.0, 0.0,
-						 // down face
+						 // Down face
 						  0.0,-1.0, 0.0,
 						  0.0,-1.0, 0.0,
 						  0.0,-1.0, 0.0,
@@ -300,14 +89,14 @@ objRender.normal_data = [
 						  0.0,-1.0, 0.0,
 						  0.0,-1.0, 0.0,
 						 
-						 // right face
+						 // Right face
 						  1.0, 0.0, 0.0,
 						  1.0, 0.0, 0.0,
 						  1.0, 0.0, 0.0,
 						  1.0, 0.0, 0.0,
 						  1.0, 0.0, 0.0,
 						  1.0, 0.0, 0.0,
-						 // left face
+						 // Left face
 						 -1.0, 0.0, 0.0,
 						 -1.0, 0.0, 0.0,
 						 -1.0, 0.0, 0.0,
@@ -316,6 +105,24 @@ objRender.normal_data = [
 						 -1.0, 0.0, 0.0
 						 
 						 ];
+
+objRender.vertex_indices = [
+							 0, 1, 2,	 3, 4, 5,		// Front face
+							 6, 7, 8,	 9,10,11,		// Back face
+							12,13,14,	15,16,17,		// Up face
+							18,19,20,	21,22,23,		// Down face
+							24,25,26,	27,28,29,		// Right face
+							30,31,32,	33,34,35
+];
+
+objRender.normal_indices = [
+							 0, 1, 2,	 3, 4, 5,		// Front face
+							 6, 7, 8,	 9,10,11,		// Back face
+							12,13,14,	15,16,17,		// Up face
+							18,19,20,	21,22,23,		// Down face
+							24,25,26,	27,28,29,		// Right face
+							30,31,32,	33,34,35
+];
 
 /*
 	Based on code from:
@@ -429,6 +236,11 @@ function draw() {
 	gl.uniformMatrix4fv(uChange,false,m4identity);
 	
 	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
+
+//	Code below is not implemented
+/*
+	gl.drawElements(objRender.data_type, ibVertexBuffer.length, gl.UNSIGNED_SHORT, 0)
+*/
 }
 
 
@@ -509,14 +321,16 @@ function initShaders(){
 }
 
 function initBuffers(){
-	vbVertexBuffer = gl.createBuffer();
-	vbNormalBuffer = gl.createBuffer();
-	
-	
-	vbVertexBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
-	vbVertexBuffer.itemSize = 3;	// 3 elements in size each
 
-	// Make vertex buffer (vbVertexBuffer) active
+	/*
+		Code for binding 'position' attributes vs 'color' attributes is based loosely on Mozilla documentation at
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_shaders_to_apply_color_in_WebGL
+	*/
+	vbVertexBuffer = gl.createBuffer();
+	vbVertexBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex positin buffer
+	vbVertexBuffer.itemSize = 3;						// 3 elements in size each
+
+	// Make position vertex buffer (vbVertexBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active vertex buffer (vbVertexBuffer)
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
@@ -527,15 +341,46 @@ function initBuffers(){
 	gl.enableVertexAttribArray(aPos);
 	// specifies location (aPos) of current vertex attributes (vbVertexBuffer)
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-	
 
+	/*
+		Code for index buffers based upon Mozilla documentation at
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
+	*/
+	/*
+	ibVertexBuffer = gl.createBuffer();
+	ibVertexBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
+	ibVertexBuffer.itemSize = 3;						// 3 elements in size each
 	
+	// Make position index buffer (ibVertexBuffer) active
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibVertexBuffer);
+	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active vertex buffer (vbVertexBuffer)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Float32Array(objRender.vertex_indices), gl.STATIC_DRAW);
 	
+	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
+	aPos = gl.getAttribLocation(shaderProgram, "aPos");
+	// enable addtribute variable (aPos) when rendering
+	gl.enableVertexAttribArray(aPos);
+	// specifies location (aPos) of current vertex attributes (ibVertexBuffer)
+	gl.vertexAttribPointer(aPos, ibVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	*/
 	
+	/*
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	*/
+	
+	/*
+		Code for binding 'color' attributes vs 'position' attributes is based loosely on Mozilla documentation at
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_shaders_to_apply_color_in_WebGL
+	*/
+	
+	vbNormalBuffer = gl.createBuffer();
 	vbNormalBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
 	vbNormalBuffer.itemSize = 3;						// 3 elements in size each
 	
-	// Make vertex buffer (vbNormalBuffer) active
+	// Make normal vetex buffer (vbNormalBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	// Bind (Float32 converted) vertex array (objRender.normal_data) to active vertex buffer (vbNormalBuffer)
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
@@ -544,12 +389,37 @@ function initBuffers(){
 	aNorm = gl.getAttribLocation(shaderProgram, "aNorm");
 	// enable addtribute variable (aNorm) when rendering
 	gl.enableVertexAttribArray(aNorm);
-	// specifies location (aNorm) of current vertex attributes (vbVertexBuffer)
-	gl.vertexAttribPointer(aNorm, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	// specifies location (aNorm) of current vertex attributes (vbNormalBuffer)
+	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
+	/*
+		Code for index buffers based upon Mozilla documentation at
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
+	*/
+	/*
+	ibNormalBuffer = gl.createBuffer();
+	ibNormalBuffer.numItems = objRender.numVectors();	// 4 vectors in vertex buffer
+	ibNormalBuffer.itemSize = 3;						// 3 elements in size each
 	
+	// Make normal index buffer (ibNormalBuffer) active
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vbNormalBuffer);
+	// Bind (Float32 converted) vertex array (objRender.normal_data) to active vertex buffer (vbNormalBuffer)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
 	
+	// create ATTRIBUTE variable, and assign shader attribute (aNorm) to it
+	aNorm = gl.getAttribLocation(shaderProgram, "aNorm");
+	// enable addtribute variable (aNorm) when rendering
+	gl.enableVertexAttribArray(aNorm);
+	// specifies location (aNorm) of current vertex attributes (ibNormalBuffer)
+	gl.vertexAttribPointer(aNorm, ibNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	*/
 	
+	/*
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	*/
 	
 	// create UNIFORM variable, and assign shader uniform (uLight) to it
 	uLight = gl.getUniformLocation(shaderProgram, "uLight");
