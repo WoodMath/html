@@ -230,19 +230,17 @@ function draw() {
 	gl.uniformMatrix4fv(uChange,false,m4identity);
 	
 
-/*
+	/*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
-  
+	*/  
 	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
 
-*/
-
-//	Code below is not implemented
-///*
+	//	Index Buffer code below is not implemented for Geom.evaluate
+	/*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 
@@ -250,28 +248,10 @@ function draw() {
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
   
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
-
 	gl.drawElements(objRender.data_type, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-//*/
+	*/
 
 
-
-
-/*  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesBuffer);
-  gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-  
-  // Set the colors attribute for the vertices.
-  
-  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
-  gl.vertexAttribPointer(vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
-  
-  // Draw the cube.
-  
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVerticesIndexBuffer);
-  setMatrixUniforms();
-  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
-
-*/
 }
 
 
@@ -412,7 +392,7 @@ function initBuffers(){
 		Code for index buffers based upon Mozilla documentation at
 			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
 	*/
-//	/*
+	/*
 	ibIndexBuffer = gl.createBuffer();
 	ibIndexBuffer.numItems = objRender.numIndices();	// 4 vectors in vertex buffer
 	ibIndexBuffer.itemSize = 3;						// 3 elements in size each
@@ -421,8 +401,7 @@ function initBuffers(){
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active index buffer (ibIndexBuffer)
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(objRender.vertex_indices), gl.STATIC_DRAW);
-
-//	*/
+	*/
 
 	/*
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
