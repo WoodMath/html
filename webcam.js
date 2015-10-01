@@ -131,7 +131,7 @@ function loadParametric(sFunction){
 	
 }
 
-function WebGLStart(){
+function WebCamStart(){
 	
 	
 
