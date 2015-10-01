@@ -208,14 +208,8 @@ function mouseMovement(e){
 function draw() {
 
 	mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
-//	console.log('v3translate[0] = ' + v3translate[0] + ' ; v3translate[1] = ' + v3translate[1] + ' ; v3translate[2] = ' + v3translate[2]);
 	
-	
-//	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	
-
- 
 	gl.useProgram(shaderProgram);
 	
 
@@ -236,7 +230,7 @@ function draw() {
 	gl.uniformMatrix4fv(uChange,false,m4identity);
 	
 
-///*
+/*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 
@@ -245,20 +239,20 @@ function draw() {
   
 	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
 
-//*/
+*/
 
 //	Code below is not implemented
-	/*
+///*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
   
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibVertexBuffer);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 
-	gl.drawElements(objRender.data_type, ibVertexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-	*/
+	gl.drawElements(objRender.data_type, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+//*/
 
 
 
@@ -291,7 +285,6 @@ function initGL() {
 		
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clearDepth(20.0);
-//		gl.depthMask(true);
 		gl.enable(gl.BLEND);
 		gl.enable(gl.DEPTH_TEST);
 		gl.depthFunc(gl.LEQUAL);
@@ -419,17 +412,17 @@ function initBuffers(){
 		Code for index buffers based upon Mozilla documentation at
 			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
 	*/
-	/*
+//	/*
 	ibIndexBuffer = gl.createBuffer();
 	ibIndexBuffer.numItems = objRender.numIndices();	// 4 vectors in vertex buffer
 	ibIndexBuffer.itemSize = 3;						// 3 elements in size each
 	
-	// Make position index buffer (ibVertexBuffer) active
+	// Make index buffer (ibIndexBuffer) active
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
-	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active index buffer (ibVertexBuffer)
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Float32Array(objRender.vertex_indices), gl.STATIC_DRAW);
+	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active index buffer (ibIndexBuffer)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(objRender.vertex_indices), gl.STATIC_DRAW);
 
-	*/
+//	*/
 
 	/*
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
