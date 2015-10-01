@@ -10,17 +10,17 @@ function mat4FromMat3(matDest, matSource){
 		http://stackoverflow.com/questions/359494/does-it-matter-which-equals-operator-vs-i-use-in-javascript-comparisons
 */
 	
-	matDest[00] = matSource[00];
-	matDest[01] = matSource[01];
-	matDest[02] = matSource[02];
-	matDest[03] = 0.0;
-	matDest[04] = matSource[03];
-	matDest[05] = matSource[04];
-	matDest[06] = matSource[05];
-	matDest[07] = 0.0;
-	matDest[08] = matSource[06];
-	matDest[09] = matSource[07];
-	matDest[10] = matSource[08];
+	matDest[ 0] = matSource[ 0];
+	matDest[ 1] = matSource[ 1];
+	matDest[ 2] = matSource[ 2];
+	matDest[ 3] = 0.0;
+	matDest[ 4] = matSource[ 3];
+	matDest[ 5] = matSource[ 4];
+	matDest[ 6] = matSource[ 5];
+	matDest[ 7] = 0.0;
+	matDest[ 8] = matSource[ 6];
+	matDest[ 9] = matSource[ 7];
+	matDest[10] = matSource[ 8];
 	matDest[11] = 0.0;
 	matDest[12] = 0.0;
 	matDest[13] = 0.0;

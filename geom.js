@@ -76,6 +76,18 @@ Geom.prototype.numVectors = function(){
 	
 }
 
+Geom.prototype.numIndices = function(){
+	
+	if(this.vertex_indices.length % 3)
+		return -1;			// does not contain 3-vectors;
+	
+	if(this.normal_indices.length && this.normal_indices.length != this.vertex_indices.length)
+		return -1;			// contains normal data but not same size as vertex data;
+
+	return (this.vertex_indices.length);
+	
+}
+
 Geom.prototype.evaluate = function(
 //	vertex_array, normal_array,			// arrays to store output
 	fnCallback,							// callback
