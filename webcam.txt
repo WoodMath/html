@@ -21,3 +21,40 @@ https://jsfiddle.net/t2LLwjsy/
 http://ask.metafilter.com/7827/Multiple-Webcams
 https://www.reddit.com/r/javascript/comments/3gcl6o/help_for_a_beginner_with_multiple_webcams/
 https://www.scriptcam.com/
+http://w3c.github.io/mediacapture-main/getusermedia.html
+http://stackoverflow.com/questions/20659698/how-to-take-image-snapshot-with-client-side-camera-in-my-django-web-application
+http://stackoverflow.com/questions/23563558/webcam-snapshot-to-canvas
+http://stackoverflow.com/questions/15849724/capture-high-resolution-video-image-html5
+
+http://www.peterkovesi.com/matlabfns/index.html
+http://study.marearts.com/2011/11/8-point-algorithm-matlab-source-code.html
+http://crcv.ucf.edu/source/fundamental_matrix
+http://www.mathworks.com/matlabcentral/fileexchange/27541-fundamental-matrix-computation
+https://www.cs.unc.edu/~blloyd/comp290-089/fmatrix/
+http://www.cs.unc.edu/~marc/tutorial/node54.html
+http://www.researchgate.net/post/Calculating_the_fundamental_matrix_using_the_eight_point_algorithm2
+http://docs.opencv.org/master/da/de9/tutorial_py_epipolar_geometry.html#gsc.tab=0
+http://docs.opencv.org/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
+https://www8.cs.umu.se/kurser/TDBD19/VT05/reconstruct-4.pdf
+http://cs.gmu.edu/~kosecka/lectures.html
+https://www.eecis.udel.edu/~cer/arv/readings/old_mkss.pdf
+http://fhtagn.net/prog/2012/09/27/opencv-fundamentalmat.html
+http://www.vision.caltech.edu/bouguetj/calib_doc/
+http://danielwedge.com/fmatrix/
+http://answers.opencv.org/question/27155/from-fundamental-matrix-to-rectified-images/
+http://www.mathworks.com/matlabcentral/answers/97093-why-do-i-get-different-results-from-svd-using-different-machines-platforms-or-blas-in-matlab-7-6
+http://ece631web.groups.et.byu.net/Lectures/ECEn631%2013%20-%208%20Point%20Algorithm.pdf
+http://stackoverflow.com/questions/20467403/opencv-fundamental-matrix-and-moving-camera
+http://opencv-python-tutroals.readthedocs.org/en/latest/py_tutorials/py_calib3d/py_epipolar_geometry/py_epipolar_geometry.html
+https://www8.cs.umu.se/kurser/TDBD19/VT05/reconstruct-4.pdf
+http://stackoverflow.com/questions/26681523/matlab-3d-reconstruction-using-eight-point-algorithm
+http://www.mathworks.com/matlabcentral/fileexchange/27541-fundamental-matrix-computation
+
+
+git checkout -- filename.ext
+git stash
+git stash branch
+git pull origin
+git pull master
+git pull branch
+git remote update
