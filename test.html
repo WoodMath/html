@@ -53,9 +53,9 @@ function methodThr(){
 	
 	
 	var aObj = document.createElement("a");
-//	aObj.href = "data:application/text;charset=utf-8," + encodeURIComponent("Hello World!");
+	aObj.href = "data:application/text;charset=utf-8," + encodeURIComponent("Hello World!");
 //	window.open(blobObj);
-	aObj.href = "data:application/text;charset=utf-8,Hello World!";
+//	aObj.href = "data:application/text;charset=utf-8,Hello World!";
 
 	aObj.download = "Example.txt";
 	aObj.click();
@@ -63,9 +63,9 @@ function methodThr(){
 }
 
 function action(){
-	methodOne();
-	
-	
+//	methodOne();
+//	methodTwo();
+	methodThr();
 	
 }
 
