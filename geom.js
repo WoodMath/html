@@ -102,8 +102,10 @@ Geom.prototype.evaluate = function(
 	var uSteps = Math.round( (uMax - uMin) / uStep) + 1;
 	var vSteps = Math.round( (vMax - vMin) / vStep) + 1;
 
-	var uvArray[uSteps][vSteps];
-	
+	var uvArray = new Array(uSteps * vSteps);
+	var iStride = vSteps;	
+
+
 	for(uInc = uMin; uInc <= uMax; uInc += uStep)
 		for(vInc = vMin; vInc <= vMax; vInc += vStep){
 
@@ -111,12 +113,12 @@ Geom.prototype.evaluate = function(
 			uIndex = Math.round((uInc - uMin) / uStep);
 			vIndex = Math.round((vInc - vMin) / vStep);
 		
-			uvArray[uIndex][vIndex] = result;
+			uvArray[uIndex * iStride + vIndex] = result;
 			if(uIndex > 0 && vIndex > 0){ // is not on lower end of UV boundary
-				var uv00 = uvArray[uIndex-1][vIndex-1];		// 	LL corner
-				var uv01 = uvArray[uIndex-1][vIndex-0];		// 	UL corner
-				var uv10 = uvArray[uIndex-0][vIndex-1];		//	LR corner
-				var uv11 = uvArray[uIndex-0][vIndex-0];		//	UR corner
+				var uv00 = uvArray[(uIndex-1)*iStride + (vIndex-1)];		// 	LL corner
+				var uv01 = uvArray[(uIndex-1)*iStride + (vIndex-0)];		// 	UL corner
+				var uv10 = uvArray[(uIndex-0)*iStride + (vIndex-1)];		//	LR corner
+				var uv11 = uvArray[(uIndex-0)*iStride + (vIndex-0)];		//	UR corner
 
 				if(uv00 !== "undefined" && uv01 !== "undefined" && uv10 !== "undefined" && uv11 !== "undefined"){
 
