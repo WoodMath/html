@@ -281,7 +281,7 @@ function initGL() {
 		
 		pMatrix = mat4.create();
 		pMatrix = mat4.identity(pMatrix);
-		pMatrix = mat4.perspective(pMatrix, Math.PI/180.0*90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 5.01);
+		pMatrix = mat4.perspective(pMatrix, Math.PI/180.0*90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 10.01);
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 
@@ -475,9 +475,9 @@ function loadParametric(sFunction){
 			-0.5, 0.5						// function parameters (starting from and stopping at)
 		);
 
-	if(sFunction === "box")
+	if(sFunction === "cube")
 		obj.evaluate(
-			box,							// callback
+			cube,							// callback
 			0.0, 1.0, 0.1*(1.0/4.0),		// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
 			0.0, 1.0, 0.1*(1.0/3.0),		// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
 			1.0, -1.0/2.0					// function parameters (size and centerinf offset)
