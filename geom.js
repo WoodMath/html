@@ -98,15 +98,57 @@ Geom.prototype.evaluate = function(
 
 	var vertex_array = [];
 	var normal_array = [];
+
+	var uSteps = Math.round( (uMax - uMin) / uStep) + 1;
+	var vSteps = Math.round( (vMax - vMin) / vStep) + 1;
+
+	var uvArray[uSteps][vSteps];
 	
 	for(uInc = uMin; uInc <= uMax; uInc += uStep)
 		for(vInc = vMin; vInc <= vMax; vInc += vStep){
+
 			var result = fnCallback(uInc, vInc, fParamOne, fParamTwo);
+			uIndex = Math.round((uInc - uMin) / uStep);
+			vIndex = Math.round((vInc - vMin) / vStep);
+		
+			uvArray[uIndex][vIndex] = result;
+			if(uIndex > 0 && vIndex > 0){ // is not on lower end of UV boundary
+				var uv00 = uvArray[uIndex-1][vIndex-1];		// 	LL corner
+				var uv01 = uvArray[uIndex-1][vIndex-0];		// 	UL corner
+				var uv10 = uvArray[uIndex-0][vIndex-1];		//	LR corner
+				var uv11 = uvArray[uIndex-0][vIndex-0];		//	UR corner
+
+				if(uv00 !== "undefined" && uv01 !== "undefined" && uv10 !== "undefined" && uv11 !== "undefined"){
+
+					// Triangle 1 vertices
+					vertex_array.push(uv00.position.x, uv00.position.y, uv00.position.z);
+					vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
+					vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
+
+					// Triangle 2 vertices
+					vertex_array.push(uv11.position.x, uv11.position.y, uv11.position.z);
+					vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
+					vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
+
+					// Triangle 1 normals
+					normal_array.push(uv00.normal.x, uv00.normal.y, uv00.normal.z);
+					normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+					normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+
+					// Triangle 2 normals
+					normal_array.push(uv11.normal.x, uv11.normal.y, uv11.normal.z);
+					normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+					normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+				}
+
+			}
+
+/*
 			if(typeof result !== "undefined"){
 				vertex_array.push(result.position.x, result.position.y, result.position.z );
-				normal_array.push(result.normal.x, result.normal.y, result.normal.z );
-				
+				normal_array.push(result.normal.x, result.normal.y, result.normal.z );				
 			}
+*/
 			
 		}
 	
