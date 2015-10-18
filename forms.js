@@ -1,4 +1,4 @@
-
+"use strict";	//	Force variable declaration
 var fr = new FileReader();
 
 

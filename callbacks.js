@@ -1,3 +1,4 @@
+"use strict";	//	Force variable declaration
 function sphere(			//  creates a sphere centered at origin, by rotating circle around Y-axis
 	uParam,
 	vParam,
@@ -19,7 +20,7 @@ function sphere(			//  creates a sphere centered at origin, by rotating circle a
 	var f3Position = new Vector3d(0.0, 0.0, 0.0);
 	
 	//	V-parameter will begin at South-pole, and wrap to North-pole
-	fRadiusToBeRotated = fRadius * Math.cos((vParam - 90.0)  * Math.PI / 180.0);
+	var fRadiusToBeRotated = fRadius * Math.cos((vParam - 90.0)  * Math.PI / 180.0);
 	f3Position.y = fRadius * Math.sin((vParam - 90.0) * Math.PI / 180.0);
 	
 	//	U-parameter will wrap around equator of Torus
@@ -113,18 +114,19 @@ function square(		//  creates a square parrallel to the XY-plane (Perform rotati
 	return f3Surface;
 }
 
-function cube(			//  creates a box based on UV-parameterization of cube
-   uParam,
-   vParam,
-   fSize,				//	cube size
-   fOffset				//	determines whether cube is "centered" at origin (fOffset = -fSize/2) or "offset" from origin (fOffset = 0)
+function cube(		//  creates a box based on UV-parameterization of cube
+	uParam,
+	vParam,
+	fSize,		//	cube size
+	fOffset		//	determines whether cube is "centered" at origin (fOffset = -fSize/2) or "offset" from origin (fOffset = 0)
 ){
+
 /*
 			***** WARNING *****	
 
 	The way this is currently set up does not distinguish between faces when using
-		- uParam that are multiples of (1.0/4.0) 
-		- vParam that are multiples of (1.0/3.0)
+		- uParam that are multiples of (1.0/uMaxSwitch) 
+		- vParam that are multiples of (1.0/vMaxSwitch)
 	This should not cause issues with Position Vectors, but depending on how Normal Vectors are calculated, may cause weird artifacts in the fragment shader depending on the face routine in which a normal is calculated.
  
 	Consider implementing so that Normal Vectors for ambigous UV-values are interpolated between Normal-Vectors for adjoining faces (Currently proceeding along this path).
@@ -140,24 +142,33 @@ function cube(			//  creates a box based on UV-parameterization of cube
 	based on UV-mapping of Unit Square
  
 */
-	if(uParam < 0.0 || 1.0 < uParam)
+
+	uParam = Math.round(uParam*1000)/1000;
+	vParam = Math.round(vParam*1000)/1000;
+
+
+	var uMaxSwitch = 1.0;		// use uMaxSwitch = 1.0, vMaxSwitch = 1.0 for map when over u = [0,4], v = [0,3] 
+	var vMaxSwitch = 1.0;		// use uMaxSwitch = 4.0, vMaxSwitch = 3.0 for map when over u = [0,1], v = [0,1]
+///*
+
+	if(uParam < 0.0/uMaxSwitch || 4.0/uMaxSwitch < uParam)
 		return undefined;
-	if(vParam < 0.0 || 1.0 < vParam)
+	if(vParam < 0.0/vMaxSwitch || 3.0/vMaxSwitch < vParam)
 		return undefined;
 
 	//	Test that either (1/4) <= U <= (2/4) or that (1/3) <= V <= (2/3)
 	var bInvalidU;
 	var bInvalidV;
 	
-	if( 1.0/4.0 <= uParam && uParam  <= 2.0/4.0 )
+	if( 1.0/uMaxSwitch < uParam && uParam  < 2.0/uMaxSwitch )
 		bInvalidU = false;
 	else
 		bInvalidU = true;
 	
-	if( 1.0/3.0 <= vParam && vParam  <= 2.0/3.0 )
+	if( 1.0/vMaxSwitch < vParam && vParam  < 2.0/uMaxSwitch )
 		bInvalidV = false;
 	else
-		bInvalidv = true;
+		bInvalidV = true;
 	
 	if(Boolean(bInvalidU) && Boolean(bInvalidV))
 		return undefined;
@@ -166,96 +177,106 @@ function cube(			//  creates a box based on UV-parameterization of cube
 	var f3Position  = new Vector3d(0.0, 0.0, 0.0);
 	var f3Normal = new Vector3d(0.0, 0.0, 0.0);
 
+//	if(!(0 < uParam && uParam < 1) || !(1 < vParam && vParam < 2))
+//		return undefined;
+
 	
-	if((2.0 / 3.0) <= vParam && vParam <= (3.0 / 3.0)){		// UV is on Up face
-		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+	if((2.0/vMaxSwitch) < vParam && vParam < (3.0/vMaxSwitch)){		// UV is on Up face
+		f3Position.x = (1.0 - ((uParam - (1.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
 		f3Position.y = (1.0 / 1.0) * fSize + fOffset;
-		f3Position.z = (0.0 + ((vParam - (2.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+		f3Position.z = (0.0 + ((vParam - (2.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
 
 		(f3Normal.y)++;					// See (*) below
-		if(uParam == (1.0/4.0))			// See (**) below
+/*
+		if(uParam == (1.0/uMaxSwitch))			// See (**) below
 			(f3Normal.x)++;
-		if(uParam == (2.0/4.0))			// See (**) below
+		if(uParam == (2.0/uMaxSwitch))			// See (**) below
 			(f3Normal.x)--;
-		if(vParam == (3.0/3.0))			// See (**) below
+		if(vParam == (3.0/vMaxSwitch))			// See (**) below
 			(f3Normal.z)++;
-		
+*/		
 	}
 
-	if((1.0 / 3.0) <= vParam && vParam <= (2.0 / 3.0)){		// UV is on one of the middle faces
-		if((0.0 / 4.0) <= uParam && uParam <= (1.0 / 4.0)){	// UV is on Left face
+	if((1.0/vMaxSwitch) < vParam && vParam < (2.0/vMaxSwitch)){		// UV is on one of the middle faces
+		if((0.0/uMaxSwitch) < uParam && uParam < (1.0/uMaxSwitch)){	// UV is on Left face
 			f3Position.x = (1.0 / 1.0) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
-			f3Position.z = (1.0 - ((uParam - (0.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
+			f3Position.z = (1.0 - ((uParam - (0.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
 
 			(f3Normal.x)++;				// See (*) below
-			if(uParam == (0.0/4.0))		// See (**) below
+/*
+			if(uParam == (0.0/uMaxSwitch))		// See (**) below
 				(f3Normal.z)++;
-			if(vParam == (1.0/3.0))		// See (**) below
+			if(vParam == (1.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)--;
-			if(vParam == (2.0/3.0))		// See (**) below
+			if(vParam == (2.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)++;
-
-		
+*/
 		}
 		
-		if((1.0 / 4.0) <= uParam && uParam <= (2.0 / 4.0)){	// UV is on Front face
-			f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+		if((1.0/uMaxSwitch) < uParam && uParam < (2.0/uMaxSwitch)){	// UV is on Front face
+			f3Position.x = (1.0 - ((uParam - (1.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
 			f3Position.z = (0.0 / 1.0) * fSize + fOffset;
 
 			(f3Normal.z)--;				// See (*) below
+			
 		}
 		
-		if((2.0 / 4.0) <= uParam && uParam <= (3.0 / 4.0)){	// UV is on Right face
+		if((2.0/uMaxSwitch) < uParam && uParam < (3.0/uMaxSwitch)){	// UV is on Right face
 			f3Position.x = (0.0 / 1.0) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
-			f3Position.z = (0.0 + ((uParam - (2.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
+			f3Position.z = (0.0 + ((uParam - (2.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
 
 			(f3Normal.x)--;				// See (*) below
-			if(vParam == (1.0/3.0))		// See (**) below
+/*
+			if(vParam == (1.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)--;
-			if(vParam == (2.0/3.0))		// See (**) below
+			if(vParam == (2.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)++;
+*/
 		}
 		
-		if((3.0 / 4.0) <= uParam && uParam <= (4.0 / 4.0)){	// UV is on Back face
-			f3Position.x = (0.0 + ((uParam - (3.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
-			f3Position.y = (0.0 + ((vParam - (1.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+		if((3.0/uMaxSwitch) < uParam && uParam < (4.0/uMaxSwitch)){	// UV is on Back face
+			f3Position.x = (0.0 + ((uParam - (3.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
+			f3Position.y = (0.0 + ((vParam - (1.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
 			f3Position.z = (1.0 / 1.0) * fSize + fOffset;
 
 			(f3Normal.z)++;				// See (*) below
-			if(uParam == (4.0/4.0))		// See (**) below
+/*
+			if(uParam == (4.0/uMaxSwitch))		// See (**) below
 				(f3Normal.x)++;
-			if(vParam == (1.0/3.0))		// See (**) below
+			if(vParam == (1.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)--;
-			if(vParam == (2.0/3.0))		// See (**) below
+			if(vParam == (2.0/vMaxSwitch))		// See (**) below
 				(f3Normal.y)++;
+*/
 		}
 		
 		
 	}
 	
-	if((0.0 / 3.0) <= vParam && vParam <= (1.0 / 3.0)){		// UV is on down Face
-		f3Position.x = (1.0 - ((uParam - (1.0/4.0)) / (1.0/4.0))) * fSize + fOffset;
+	if((0.0/vMaxSwitch) < vParam && vParam < (1.0/vMaxSwitch)){		// UV is on down Face
+		f3Position.x = (1.0 - ((uParam - (1.0/uMaxSwitch)) / (1.0/uMaxSwitch))) * fSize + fOffset;
 		f3Position.y = (0.0 / 1.0) *fSize + fOffset;
-		f3Position.z = (1.0 - ((vParam - (0.0/3.0)) / (1.0/3.0))) * fSize + fOffset;
+		f3Position.z = (1.0 - ((vParam - (0.0/vMaxSwitch)) / (1.0/vMaxSwitch))) * fSize + fOffset;
 
 		(f3Normal.y)--;					// See (*) below
-		if(uParam == (1.0/4.0))			// See (**) below
+/*
+		if(uParam == (1.0/uMaxSwitch))			// See (**) below
 			(f3Normal.x)++;
-		if(uParam == (2.0/4.0))			// See (**) below
+		if(uParam == (2.0/uMaxSwitch))			// See (**) below
 			(f3Normal.x)--;
-		if(vParam == (0.0/3.0))			// See (**) below
+		if(vParam == (0.0/vMaxSwitch))			// See (**) below
 			(f3Normal.z)++;
-		
+*/	
 	}
 	
 	
-/*
-		(*)		- Will automatically Multi-count for edges & corners adjacent in the cube and also adjacent in the UV-map (i.e. UV=[(1.0/4.0), (1.0/3.0)])
-		(**)	- Will manually Multi-count for edges & corners adjacent in the cube bot not adjacent in the UV-map (i.e. UV=[(1.0/4.0), (0.0/3.0)])
-*/
+
+	//	(*)	- Will automatically Multi-count for edges & corners adjacent in the cube and also adjacent in the UV-map (i.e. UV=[(1.0/uMaxSwitch), (1.0/vMaxSwitch)])
+	//	(**)	- Will manually Multi-count for edges & corners adjacent in the cube bot not adjacent in the UV-map (i.e. UV=[(1.0/uMaxSwitch), (0.0/vMaxSwitch)])
+
 	
 	
 	

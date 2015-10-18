@@ -1,3 +1,4 @@
+"use strict";	//	Force variable declaration
 /*
 	Defined according to post at
 		http://stackoverflow.com/questions/1635116/javascript-class-method-vs-class-prototype-method
@@ -106,44 +107,50 @@ Geom.prototype.evaluate = function(
 	var iStride = vSteps;	
 
 
-	for(uInc = uMin; uInc <= uMax; uInc += uStep)
-		for(vInc = vMin; vInc <= vMax; vInc += vStep){
+	for(var uInc = uMin; uInc <= uMax; uInc += uStep, uInc = Math.round(uInc*1000)/1000)
+		for(var vInc = vMin; vInc <= vMax; vInc += vStep, vInc = Math.round(vInc*1000)/1000){
 
 			var result = fnCallback(uInc, vInc, fParamOne, fParamTwo);
-			uIndex = Math.round((uInc - uMin) / uStep);
-			vIndex = Math.round((vInc - vMin) / vStep);
+			var uIndex = Math.round((uInc - uMin) / uStep);
+			var vIndex = Math.round((vInc - vMin) / vStep);
 		
 			uvArray[uIndex * iStride + vIndex] = result;
-			if(uIndex > 0 && vIndex > 0){ // is not on lower end of UV boundary
-				var uv00 = uvArray[(uIndex-1)*iStride + (vIndex-1)];		// 	LL corner
-				var uv01 = uvArray[(uIndex-1)*iStride + (vIndex-0)];		// 	UL corner
-				var uv10 = uvArray[(uIndex-0)*iStride + (vIndex-1)];		//	LR corner
-				var uv11 = uvArray[(uIndex-0)*iStride + (vIndex-0)];		//	UR corner
+			if(typeof result !== "undefined")
+				if(uIndex > 0 && vIndex > 0){ // is not on lower end of UV boundary
+					var uv00 = uvArray[(uIndex-1)*iStride + (vIndex-1)];		// 	LL corner
+					var uv01 = uvArray[(uIndex-1)*iStride + (vIndex-0)];		// 	UL corner
+					var uv10 = uvArray[(uIndex-0)*iStride + (vIndex-1)];		//	LR corner
+					var uv11 = uvArray[(uIndex-0)*iStride + (vIndex-0)];		//	UR corner
 
-				if(uv00 !== "undefined" && uv01 !== "undefined" && uv10 !== "undefined" && uv11 !== "undefined"){
+					if(typeof uv00 !== "undefined" && 
+						typeof uv01 !== "undefined" && 
+							typeof uv10 !== "undefined" && 
+								typeof uv11 !== "undefined"){
 
-					// Triangle 1 vertices
-					vertex_array.push(uv00.position.x, uv00.position.y, uv00.position.z);
-					vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
-					vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
 
-					// Triangle 2 vertices
-					vertex_array.push(uv11.position.x, uv11.position.y, uv11.position.z);
-					vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
-					vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
+//						console.log(" uvInc = [" + uInc + "," + vInc + "], uvIndex = [" + uIndex + "," + vIndex + "] \n");
+						// Triangle 1 vertices
+						vertex_array.push(uv00.position.x, uv00.position.y, uv00.position.z);
+						vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
+						vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
 
-					// Triangle 1 normals
-					normal_array.push(uv00.normal.x, uv00.normal.y, uv00.normal.z);
-					normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
-					normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+						// Triangle 2 vertices
+						vertex_array.push(uv11.position.x, uv11.position.y, uv11.position.z);
+						vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
+						vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
 
-					// Triangle 2 normals
-					normal_array.push(uv11.normal.x, uv11.normal.y, uv11.normal.z);
-					normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
-					normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+						// Triangle 1 normals
+						normal_array.push(uv00.normal.x, uv00.normal.y, uv00.normal.z);
+						normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+						normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+
+						// Triangle 2 normals
+						normal_array.push(uv11.normal.x, uv11.normal.y, uv11.normal.z);
+						normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+						normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+					}
+
 				}
-
-			}
 
 /*
 			if(typeof result !== "undefined"){

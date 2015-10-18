@@ -1,3 +1,4 @@
+"use strict";	//	Force variable declaration
 var canvas;
 var gl;
 
@@ -164,7 +165,7 @@ var pMatrix, mvMatrix;
 var uProj, uMove;
 var tMatrix, tempMatrix;
 var normMatrix;
-var uNorm, uLight, uPos;
+var uNorm, uLight, uPos, uColor;
 var uChange;
 
 var v3light = [0.0, 0.0, 5.0];
@@ -213,11 +214,11 @@ function draw() {
 	gl.useProgram(shaderProgram);
 	
 
-//	tMatrix = mat3.normalFromMat4(mat3.create(), mvMatrix);
+
+	// Need Normal-Matrix (inverse-transpose of Modelview-matrix)
+	// For proper shading of normal faces
 	normMatrix = mat4FromMat3(mat4.create(), mat3.normalFromMat4(mat3.create(), mvMatrix));
 	
-//	tMatrix = mat4.transpose(mat4.create(), pMatrix);
-//	tMatrix = mat4FromMat3(mat4.create(), mat3.normalFromMat4(mat3.create(), mvMatrix));
 	
 	
 	gl.uniform3fv(uLight,v3light);
@@ -278,10 +279,18 @@ function initGL() {
 		mvMatrix = mat4.create();
 		mvMatrix = mat4.identity(mvMatrix);
 		mvMatrix = mat4.translate(mvMatrix, mat4.identity(mat4.create()), v3translate);
-		
-		pMatrix = mat4.create();
-		pMatrix = mat4.identity(pMatrix);
-		pMatrix = mat4.perspective(pMatrix, Math.PI/180.0*90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 10.01);
+	
+		var jMatrix = makePerspective(Math.PI / 180.0 * 90.0 , gl.viewportWidth / gl.viewportHeight, 0.01, 100.0);
+		jMatrix = jMatrix.flatten();
+	
+		var kMatrix = mat4.create();
+		kMatrix = mat4.identity(kMatrix);
+		kMatrix = mat4.perspective(kMatrix, Math.PI / 180.0 * 90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 100.01);
+
+
+		// There is a Disconnect between methods being used
+		// Read up on how it is calculated
+		pMatrix = kMatrix;
 
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 
@@ -453,34 +462,34 @@ function loadParametric(sFunction){
 */
 	if(sFunction === "sphere")
 		obj.evaluate(
-			sphere,							// callback
-			0.0, 360.0, 5.0,				// U-Parameterization (Min, Max, Step)	(Longitude)
-			0.0, 180.0, 5.0,				// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
-			1.0, "empty"					// function parameters (radius and dummy)
+			sphere,				// callback
+			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Longitude)
+			0.0, 180.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
+			1.0, "empty"			// function parameters (radius and dummy)
 		);
 
 	if(sFunction === "torus")
 		obj.evaluate(
-			torus,							// callback
-			0.0, 360.0, 5.0,				// U-Parameterization (Min, Max, Step)	(Along the tube)
-			0.0, 360.0, 5.0,				// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
-			1.0, 2.0						// function parameters (radius and dummy)
+			torus,				// callback
+			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Along the tube)
+			0.0, 360.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
+			1.0, 2.0			// function parameters (radius and dummy)
 		 );
 	
 	if(sFunction === "square")
 		obj.evaluate(
-			square,							// callback
-			0.0, 1.0, 0.1,					// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
-			0.0, 1.0, 0.1,					// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
-			-0.5, 0.5						// function parameters (starting from and stopping at)
+			square,				// callback
+			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
+			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
+			-0.5, 0.5			// function parameters (starting from and stopping at)
 		);
 
 	if(sFunction === "cube")
 		obj.evaluate(
-			cube,							// callback
-			0.0, 1.0, 0.1*(1.0/4.0),		// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
-			0.0, 1.0, 0.1*(1.0/3.0),		// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
-			1.0, -1.0/2.0					// function parameters (size and centerinf offset)
+			cube,				// callback
+			0.0, 4.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
+			0.0, 3.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
+			1.0, -1.0/2.0			// function parameters (size and centerinf offset)
 		);
 
 	objRender = obj;
