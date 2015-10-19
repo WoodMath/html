@@ -89,7 +89,7 @@ function square(		//  creates a square parrallel to the XY-plane (Perform rotati
    uParam,
    vParam,
    fPlaneMin,			//	minimum X,Y points to render
-   fPlaneMax			//	maximum X,Y points to render, also used in Calculation of
+   fPlaneMax			//	maximum X,Y points to render, also used in Calculation of size and translation
 ){
 	
 /*

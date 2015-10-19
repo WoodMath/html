@@ -484,13 +484,63 @@ function loadParametric(sFunction){
 			-0.5, 0.5			// function parameters (starting from and stopping at)
 		);
 
-	if(sFunction === "cube")
+	if(sFunction === "cube"){
+/*
 		obj.evaluate(
 			cube,				// callback
 			0.0, 4.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
 			0.0, 3.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
 			1.0, -1.0/2.0			// function parameters (size and centerinf offset)
 		);
+*/
+		//	Front face	
+		obj.evaluate(
+			square,				// callback
+			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
+			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
+			-1.0, 1.0			// function parameters (starting from and stopping at)
+		);
+
+		//	Left face
+		var mat3t = [ 0.0, 0.0,-1.0,
+			      0.0, 1.0, 0.0,
+			      1.0, 0.0, 0.0];
+		var newObj = obj.transform(mat3t);	// Apply transformation to original data
+		var rtrnObj = newObj.merge(obj);	// Merge back into object being returned
+
+		//	Right face
+		mat3t = [ 0.0, 0.0, 1.0,
+			  0.0, 1.0, 0.0,
+			 -1.0, 0.0, 0.0];
+		newObj = obj.transform(mat3t);		// Apply transformation to original data
+		rtrnObj = newObj.merge(rtrnObj);		// Merge back into object being transformed
+
+		//	Back face
+		mat3t = [ 1.0, 0.0, 0.0,
+			  0.0, 1.0, 0.0,
+			  0.0, 0.0,-1.0];
+		newObj = obj.transform(mat3t);		// Apply transformation to original data
+		rtrnObj = newObj.merge(rtrnObj);	// Merge back into object being transformed
+
+		//	Up face
+		mat3t = [ 1.0, 0.0, 0.0,
+			  0.0, 0.0, 1.0,
+			  0.0,-1.0, 0.0];
+		newObj = obj.transform(mat3t);		// Apply transformation to original data
+		rtrnObj = newObj.merge(rtrnObj);	// Merge back into object being transformed
+
+		//	Down face
+		mat3t = [ 1.0, 0.0, 0.0,
+			  0.0, 0.0,-1.0,
+			  0.0, 1.0, 0.0];
+		newObj = obj.transform(mat3t);		// Apply transformation to original data
+		rtrnObj = newObj.merge(rtrnObj);	// Merge back into object being transformed
+
+		obj = rtrnObj;				// Set 'obj' to actual merged object
+	}
+	
+
+
 
 	objRender = obj;
 	resetBuffers();

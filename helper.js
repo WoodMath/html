@@ -1,3 +1,4 @@
+"use strict";	//	Force variable declaration
 function mat4FromMat3(matDest, matSource){
 	
 	if(typeof matDest === "undefined")
@@ -36,17 +37,33 @@ function arrayNegate(arrDest, arrSource){
 	if(typeof arrDest === "undefined")
 		arrDest = new Float32Array(arrSource.length);
 	
-	if(typeof arrDest != "Float32Array")
-		delete arrDest,
+	if(typeof arrDest !== "Float32Array" || arrDest.length != arrSource.length)
 		arrDest = new Float32Array(arrSource.length);
-	
-	if(arrDest.length != arrSource.length)
-		delete arrDest,
-		arrDest = new Float32Array(arrSource.length);
-	
+
 	for(var iInc = 0; iInc < arrSource.length; iInc)
 		arrDest[iInc] = -1.0 * arrSource[iInc];
 	
 	return arrDest;
 	
+}
+
+function arrayMatrixMultiply(arrDest, arrMatrix, arrVectorList){
+
+	if(typeof arrDest === "undefined")
+		arrDest = new Float32Array(arrVectorList.length);
+
+	if(typeof arrDest !== "Float32Array" || arrDest.length != arrVectorList.length)
+		arrDest = new Float32Array(arrVectorList.length);
+
+	if(arrVectorList.length % 3)
+		return undefined;
+
+	for(var iInc = 0; iInc < arrVectorList.length; iInc += 3){
+		arrDest[iInc+0] = arrMatrix[0]*arrVectorList[iInc+0] + arrMatrix[1]*arrVectorList[iInc+1] + arrMatrix[2]*arrVectorList[iInc+2];
+		arrDest[iInc+1] = arrMatrix[3]*arrVectorList[iInc+0] + arrMatrix[4]*arrVectorList[iInc+1] + arrMatrix[5]*arrVectorList[iInc+2];
+		arrDest[iInc+2] = arrMatrix[6]*arrVectorList[iInc+0] + arrMatrix[7]*arrVectorList[iInc+1] + arrMatrix[8]*arrVectorList[iInc+2];
+
+	}
+
+	return arrDest;
 }

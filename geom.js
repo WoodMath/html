@@ -166,3 +166,75 @@ Geom.prototype.evaluate = function(
 	this.normal_data = normal_array;
 	
 }
+
+Geom.prototype.transform = function(mat3Transform){
+
+	if(mat3Transform.length != 9)
+		return undefined;
+	var mat4Transform = mat4FromMat3(mat4.create(), mat3Transform);
+	var mat3Normal = mat3.normalFromMat4(mat3.create(), mat4Transform);
+
+
+	var newGeom = new Geom();
+	newGeom.data_type = this.data_type;
+	newGeom.vertex_data = arrayMatrixMultiply(new Float32Array(this.vertex_data.length), mat3Transform, this.vertex_data);
+	newGeom.normal_data = arrayMatrixMultiply(new Float32Array(this.normal_data.length), mat3Normal, this.normal_data);
+	newGeom.vertex_indices = this.vertex_indices;
+	newGeom.normal_indices = this.normal_indices;
+
+	return newGeom;
+
+//	return mat3Normal;
+}
+
+Geom.prototype.merge = function(geomToAdd){
+
+	if(this.data_type != geomToAdd.data_type)
+		return undefined;
+	
+	var rtrnGeom = new Geom();
+
+	rtrnGeom = this;
+
+	var arrVertexVector = new Float32Array(this.vertex_data.length + geomToAdd.vertex_data.length);
+	var arrNormalVector = new Float32Array(this.normal_data.length + geomToAdd.normal_data.length);
+
+	var arrVertexIndex = new Int32Array(this.vertex_indices.length + geomToAdd.vertex_indices.length);
+	var arrNormalIndex = new Int32Array(this.normal_indices.length + geomToAdd.normal_indices.length);
+
+	//	Assign 'this' arrays
+	for(var iInc = 0; iInc < this.vertex_data.length; iInc++){
+		arrVertexVector[iInc] = this.vertex_data[iInc];
+		arrNormalVector[iInc] = this.normal_data[iInc];
+	}
+	for(var iInc = 0; iInc < this.vertex_indices.length; iInc++){
+		arrVertexIndex[iInc] = this.vertex_indices[iInc];
+		arrNormalIndex[iInc] = this.normal_indices[iInc];
+	}
+	
+	
+	var iStartVector = this.numVectors();
+
+	var iStartVectorElement = this.vertex_data.length;
+	var iStartIndexElement = this.vertex_indices.length;
+
+	//	Assign 'geomToAdd' arrays'
+	for(var iInc = 0; iInc < geomToAdd.vertex_data.length; iInc++){
+		arrVertexVector[iStartVectorElement + iInc] = geomToAdd.vertex_data[iInc];
+		arrNormalVector[iStartVectorElement + iInc] = geomToAdd.normal_data[iInc];
+	}
+	for(var iInc = 0; iInc < geomToAdd.vertex_indices.length; iInc++){
+		arrVertexIndex[iStartIndexElement + iInc] = geomToAdd.vertex_index[iInc] + iStartVector;
+		arrNormalIndex[iStartIndexElement + iInc] = geomToAdd.normal_index[iInc] + iStartVector;
+		//	Offset indices of 'newGeomToAdd' by number of vectors in 'this'
+	}
+
+	rtrnGeom.vertex_data = arrVertexVector;
+	rtrnGeom.normal_data = arrNormalVector;
+	rtrnGeom.vertex_indices = arrVertexIndex;
+	rtrnGeom.normal_indices = arrNormalIndex;
+
+	return rtrnGeom;
+	
+
+}
