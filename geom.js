@@ -31,35 +31,48 @@ Vector3d.prototype.normalize = function(){
 
 Vector3d.prototype.updateArrayForm = function(){
 	this.arrayForm[0] = this.x;
-	this.arrayForm[0] = this.y;
-	this.arrayForm[0] = this.z;
-	
+	this.arrayForm[1] = this.y;
+	this.arrayForm[2] = this.z;
+	return this;	
+}
+
+function Vector2d(u,v){
+	this.u = u;
+	this.v = v;
+	this.arrayForm = new Int32Array(2);
+	this.arrayForm[0] = this.u;
+	this.arrayForm[1] = this.v;
+}
+
+Vector2d.prototype.updateArrayForm = function(){
+	this.arrayForm[0] = this.u;
+	this.arrayForm[1] = this.v;
+	return this;
 }
 
 function Surface3d(position, normal){
 	this.position = position;
 	this.normal = normal;
-	
 }
 
 function Geom(){
-	this.data_type = undefined;
+	this.dataType = undefined;
 	/*
 	 WebGLRenderingContext.POINTS			= 0x0000;
 	 WebGLRenderingContext.LINES			= 0x0001;
 	 WebGLRenderingContext.LINE_LOOP		= 0x0002;
 	 WebGLRenderingContext.LINE_STRIP		= 0x0003;
 	 WebGLRenderingContext.TRIANGLES		= 0x0004;
-	 WebGLRenderingContext.TRIANGLE_STRIP	= 0x0005;
+	 WebGLRenderingContext.TRIANGLE_STRIP		= 0x0005;
 	 WebGLRenderingContext.TRIANGLE_FAN		= 0x0006;
 	 */
-	this.vertex_data = [];		//	Assumes this.data_type = WebGLRenderingContext.TRIANGLES
-	this.normal_data = [];		//	Assumes this.data_type = WebGLRenderingContext.TRIANGLES
+	this.vertexData = [];		//	Assumes this.dataType = WebGLRenderingContext.TRIANGLES
+	this.normalData = [];		//	Assumes this.dataType = WebGLRenderingContext.TRIANGLES
 	
 	// The following code is not implemented
 	// is only included to highlight differences of
-	this.vertex_indices = [];	//	If 'this.vertex_data' needs indices, Then 'this.vertex_indices' provides it, Else 'this.vertex_indices' is meaningless
-	this.normal_indices = [];	//	If 'this.normal_data' needs indices, Then 'this.normal_indices' provides it, Else 'this.normal_indices' is meaningless
+	this.vertexIndices = [];	//	If 'this.vertexData' needs indices, Then 'this.vertexIndices' provides it, Else 'this.vertexIndices' is meaningless
+	this.normalIndices = [];	//	If 'this.normalData' needs indices, Then 'this.normalIndices' provides it, Else 'this.normalIndices' is meaningless
 	
 	return this;
 };
@@ -67,25 +80,25 @@ function Geom(){
 
 Geom.prototype.numVectors = function(){
 	
-	if(this.vertex_data.length % 3)
+	if(this.vertexData.length % 3)
 		return -1;			// does not contain 3-vectors;
 	
-	if(this.normal_data.length && this.normal_data.length != this.vertex_data.length)
+	if(this.normalData.length && this.normalData.length != this.vertexData.length)
 		return -1;			// contains normal data but not same size as vertex data;
 
-	return (this.vertex_data.length / 3);
+	return (this.vertexData.length / 3);
 	
 }
 
 Geom.prototype.numIndices = function(){
 	
-	if(this.vertex_indices.length % 3)
+	if(this.vertexIndices.length % 3)
 		return -1;			// does not contain 3-vectors;
 	
-	if(this.normal_indices.length && this.normal_indices.length != this.vertex_indices.length)
+	if(this.normalIndices.length && this.normalIndices.length != this.vertexIndices.length)
 		return -1;			// contains normal data but not same size as vertex data;
 
-	return (this.vertex_indices.length);
+	return (this.vertexIndices.length);
 	
 }
 
@@ -114,8 +127,10 @@ Geom.prototype.evaluate = function(
 			var uIndex = Math.round((uInc - uMin) / uStep);
 			var vIndex = Math.round((vInc - vMin) / vStep);
 		
-			uvArray[uIndex * iStride + vIndex] = result;
 			if(typeof result !== "undefined")
+				
+
+				uvArray[uIndex * iStride + vIndex] = result;
 				if(uIndex > 0 && vIndex > 0){ // is not on lower end of UV boundary
 					var uv00 = uvArray[(uIndex-1)*iStride + (vIndex-1)];		// 	LL corner
 					var uv01 = uvArray[(uIndex-1)*iStride + (vIndex-0)];		// 	UL corner
@@ -161,9 +176,9 @@ Geom.prototype.evaluate = function(
 			
 		}
 	
-	this.data_type = WebGLRenderingContext.TRIANGLES;
-	this.vertex_data = vertex_array;
-	this.normal_data = normal_array;
+	this.dataType = WebGLRenderingContext.TRIANGLES;
+	this.vertexData = vertex_array;
+	this.normalData = normal_array;
 	
 }
 
@@ -176,11 +191,11 @@ Geom.prototype.transform = function(mat3Transform){
 
 
 	var newGeom = new Geom();
-	newGeom.data_type = this.data_type;
-	newGeom.vertex_data = arrayMatrixMultiply(new Float32Array(this.vertex_data.length), mat3Transform, this.vertex_data);
-	newGeom.normal_data = arrayMatrixMultiply(new Float32Array(this.normal_data.length), mat3Normal, this.normal_data);
-	newGeom.vertex_indices = this.vertex_indices;
-	newGeom.normal_indices = this.normal_indices;
+	newGeom.dataType = this.dataType;
+	newGeom.vertexData = arrayMatrixMultiply(new Float32Array(this.vertexData.length), mat3Transform, this.vertexData);
+	newGeom.normalData = arrayMatrixMultiply(new Float32Array(this.normalData.length), mat3Normal, this.normalData);
+	newGeom.vertexIndices = this.vertexIndices;
+	newGeom.normalIndices = this.normalIndices;
 
 	return newGeom;
 
@@ -189,50 +204,50 @@ Geom.prototype.transform = function(mat3Transform){
 
 Geom.prototype.merge = function(geomToAdd){
 
-	if(this.data_type != geomToAdd.data_type)
+	if(this.dataType != geomToAdd.dataType)
 		return undefined;
 	
 	var rtrnGeom = new Geom();
 
 	rtrnGeom = this;
 
-	var arrVertexVector = new Float32Array(this.vertex_data.length + geomToAdd.vertex_data.length);
-	var arrNormalVector = new Float32Array(this.normal_data.length + geomToAdd.normal_data.length);
+	var arrVertexVector = new Float32Array(this.vertexData.length + geomToAdd.vertexData.length);
+	var arrNormalVector = new Float32Array(this.normalData.length + geomToAdd.normalData.length);
 
-	var arrVertexIndex = new Int32Array(this.vertex_indices.length + geomToAdd.vertex_indices.length);
-	var arrNormalIndex = new Int32Array(this.normal_indices.length + geomToAdd.normal_indices.length);
+	var arrVertexIndex = new Int32Array(this.vertexIndices.length + geomToAdd.vertexIndices.length);
+	var arrNormalIndex = new Int32Array(this.normalIndices.length + geomToAdd.normalIndices.length);
 
 	//	Assign 'this' arrays
-	for(var iInc = 0; iInc < this.vertex_data.length; iInc++){
-		arrVertexVector[iInc] = this.vertex_data[iInc];
-		arrNormalVector[iInc] = this.normal_data[iInc];
+	for(var iInc = 0; iInc < this.vertexData.length; iInc++){
+		arrVertexVector[iInc] = this.vertexData[iInc];
+		arrNormalVector[iInc] = this.normalData[iInc];
 	}
-	for(var iInc = 0; iInc < this.vertex_indices.length; iInc++){
-		arrVertexIndex[iInc] = this.vertex_indices[iInc];
-		arrNormalIndex[iInc] = this.normal_indices[iInc];
+	for(var iInc = 0; iInc < this.vertexIndices.length; iInc++){
+		arrVertexIndex[iInc] = this.vertexIndices[iInc];
+		arrNormalIndex[iInc] = this.normalIndices[iInc];
 	}
 	
 	
 	var iStartVector = this.numVectors();
 
-	var iStartVectorElement = this.vertex_data.length;
-	var iStartIndexElement = this.vertex_indices.length;
+	var iStartVectorElement = this.vertexData.length;
+	var iStartIndexElement = this.vertexIndices.length;
 
 	//	Assign 'geomToAdd' arrays'
-	for(var iInc = 0; iInc < geomToAdd.vertex_data.length; iInc++){
-		arrVertexVector[iStartVectorElement + iInc] = geomToAdd.vertex_data[iInc];
-		arrNormalVector[iStartVectorElement + iInc] = geomToAdd.normal_data[iInc];
+	for(var iInc = 0; iInc < geomToAdd.vertexData.length; iInc++){
+		arrVertexVector[iStartVectorElement + iInc] = geomToAdd.vertexData[iInc];
+		arrNormalVector[iStartVectorElement + iInc] = geomToAdd.normalData[iInc];
 	}
-	for(var iInc = 0; iInc < geomToAdd.vertex_indices.length; iInc++){
-		arrVertexIndex[iStartIndexElement + iInc] = geomToAdd.vertex_index[iInc] + iStartVector;
-		arrNormalIndex[iStartIndexElement + iInc] = geomToAdd.normal_index[iInc] + iStartVector;
+	for(var iInc = 0; iInc < geomToAdd.vertexIndices.length; iInc++){
+		arrVertexIndex[iStartIndexElement + iInc] = geomToAdd.vertexIndices[iInc] + iStartVector;
+		arrNormalIndex[iStartIndexElement + iInc] = geomToAdd.normalIndices[iInc] + iStartVector;
 		//	Offset indices of 'newGeomToAdd' by number of vectors in 'this'
 	}
 
-	rtrnGeom.vertex_data = arrVertexVector;
-	rtrnGeom.normal_data = arrNormalVector;
-	rtrnGeom.vertex_indices = arrVertexIndex;
-	rtrnGeom.normal_indices = arrNormalIndex;
+	rtrnGeom.vertexData = arrVertexVector;
+	rtrnGeom.normalData = arrNormalVector;
+	rtrnGeom.vertexIndices = arrVertexIndex;
+	rtrnGeom.normalIndices = arrNormalIndex;
 
 	return rtrnGeom;
 	

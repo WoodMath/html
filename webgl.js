@@ -10,9 +10,9 @@ var objRender = new Geom();
 
 
 
-objRender.data_type = WebGLRenderingContext.TRIANGLES;
+objRender.dataType = WebGLRenderingContext.TRIANGLES;
 
-objRender.vertex_data = [
+objRender.vertexData = [
 						 // Front face
 						 -1.0,-1.0, 1.0,
 						 -1.0, 1.0, 1.0,
@@ -59,7 +59,7 @@ objRender.vertex_data = [
 						 -1.0, 1.0, 1.0
 						 ];
 
-objRender.normal_data = [
+objRender.normalData = [
 						 // Front face
 						  0.0, 0.0, 1.0,
 						  0.0, 0.0, 1.0,
@@ -107,7 +107,7 @@ objRender.normal_data = [
 						 
 						 ];
 
-objRender.vertex_indices = [
+objRender.vertexIndices = [
 							 0, 1, 2,	 3, 4, 5,		// Front face
 							 6, 7, 8,	 9,10,11,		// Back face
 							12,13,14,	15,16,17,		// Up face
@@ -116,7 +116,7 @@ objRender.vertex_indices = [
 							30,31,32,	33,34,35
 ];
 
-objRender.normal_indices = [
+objRender.normalIndices = [
 							 0, 1, 2,	 3, 4, 5,		// Front face
 							 6, 7, 8,	 9,10,11,		// Back face
 							12,13,14,	15,16,17,		// Up face
@@ -238,7 +238,7 @@ function draw() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 	*/  
-	gl.drawArrays(objRender.data_type, 0, vbVertexBuffer.numItems);
+	gl.drawArrays(objRender.dataType, 0, vbVertexBuffer.numItems);
 
 	//	Index Buffer code below is not implemented for Geom.evaluate
 	/*
@@ -249,7 +249,7 @@ function draw() {
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
   
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
-	gl.drawElements(objRender.data_type, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(objRender.dataType, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	*/
 
 
@@ -351,8 +351,8 @@ function initBuffers(){
 
 	// Make position vertex buffer (vbVertexBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
-	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active vertex buffer (vbVertexBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertex_data), gl.STATIC_DRAW);
+	// Bind (Float32 converted) vertex array (objRender.vertexData) to active vertex buffer (vbVertexBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.vertexData), gl.STATIC_DRAW);
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aPos) to it
 	aPos = gl.getAttribLocation(shaderProgram, "aPos");
@@ -379,8 +379,8 @@ function initBuffers(){
 	
 	// Make normal vetex buffer (vbNormalBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
-	// Bind (Float32 converted) vertex array (objRender.normal_data) to active vertex buffer (vbNormalBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normal_data), gl.STATIC_DRAW);
+	// Bind (Float32 converted) vertex array (objRender.normalData) to active vertex buffer (vbNormalBuffer)
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.normalData), gl.STATIC_DRAW);
 	
 	// create ATTRIBUTE variable, and assign shader attribute (aNorm) to it
 	aNorm = gl.getAttribLocation(shaderProgram, "aNorm");
@@ -408,8 +408,8 @@ function initBuffers(){
 	
 	// Make index buffer (ibIndexBuffer) active
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
-	// Bind (Float32 converted) vertex array (objRender.vertex_data) to active index buffer (ibIndexBuffer)
-	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(objRender.vertex_indices), gl.STATIC_DRAW);
+	// Bind (Float32 converted) vertex array (objRender.vertexData) to active index buffer (ibIndexBuffer)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(objRender.vertexIndices), gl.STATIC_DRAW);
 	*/
 
 	/*
