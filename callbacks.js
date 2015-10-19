@@ -30,8 +30,9 @@ function sphere(			//  creates a sphere centered at origin, by rotating circle a
 	var f3Normal = new Vector3d(f3Position.x, f3Position.y, f3Position.z);
 	f3Normal = f3Normal.normalize();
 	// Beautiful thing about a sphere is the normal vector (non-normalized) is equal to the position vector
-	
-	var f3Surface = new Surface3d(f3Position,f3Normal);
+
+	var f3uv = new Vector2d(uParam, vParam);	
+	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
 	
@@ -77,8 +78,8 @@ function torus(				//  creates a torus lying on the XZ-plane
 	f3Normal.z = fNormalRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
 
 	f3Normal = f3Normal.normalize();
-	
-	var f3Surface = new Surface3d(f3Position,f3Normal);
+	var f3uv = new Vector2d(uParam, vParam);	
+	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
 
@@ -109,7 +110,8 @@ function square(		//  creates a square parrallel to the XY-plane (Perform rotati
 	f3Position.y = fPlaneMin + fDistance * vParam;
 	f3Position.z = fPlaneMax
 
-	var f3Surface = new Surface3d(f3Position,f3Normal);
+	var f3uv = new Vector2d(uParam, vParam);	
+	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
 }
@@ -281,9 +283,8 @@ function cube(		//  creates a box based on UV-parameterization of cube
 	
 	
 	f3Normal = f3Normal.normalize();	// get rid of the Mult-counting on edges & corners (Double-counting on Edges, Tripple-counting on Corners)
-	
- 
-	var f3Surface = new Surface3d(f3Position,f3Normal);
+	var f3uv = new Vector2d(uParam, vParam);	
+	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
 	

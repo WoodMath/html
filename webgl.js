@@ -3,7 +3,7 @@ var canvas;
 var gl;
 
 
-var vbVertexBuffer, vbNormalBuffer;
+var vbVertexBuffer, vbNormalBuffer, vbUVBuffer;
 var ibIndexBuffer;
 
 var objRender = new Geom();
@@ -106,6 +106,53 @@ objRender.normalData = [
 						 -1.0, 0.0, 0.0
 						 
 						 ];
+objRender.uvData = [
+						 // Front face
+						  0.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 1.0,
+						 // Back face
+						  0.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 1.0,
+						 
+						 // up face
+						  0.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 1.0,
+						 // Down face
+						  0.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 1.0,
+						 
+						 // Right face
+						  0.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  1.0, 1.0,
+						 // Left face
+						  0.0, 0.0,
+						  1.0, 0.0,
+						  0.0, 1.0,
+						  0.0, 1.0,
+						  1.0, 0.0,
+						  1.0, 1.0
+						 ];
+
 
 objRender.vertexIndices = [
 							 0, 1, 2,	 3, 4, 5,		// Front face
@@ -167,6 +214,10 @@ var tMatrix, tempMatrix;
 var normMatrix;
 var uNorm, uLight, uPos, uColor;
 var uChange;
+var texBuffer;
+var imgBuffer;
+var aTexUV;
+var uSampler;
 
 var v3light = [0.0, 0.0, 5.0];
 var v3color = [0.0, 1.0, 0.0];
@@ -229,7 +280,15 @@ function draw() {
 	gl.uniformMatrix4fv(uNorm,false,normMatrix);
 
 	gl.uniformMatrix4fv(uChange,false,m4identity);
+
+	gl.uniform1i(uSampler, 0);
+
+
 	
+	/*
+		Code for index buffers based upon Mozilla documentation at
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
+	*/
 
 	/*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
@@ -428,8 +487,37 @@ function initBuffers(){
 	uMove = gl.getUniformLocation(shaderProgram, "uMove");
 	uNorm = gl.getUniformLocation(shaderProgram, "uNorm");
 	uChange = gl.getUniformLocation(shaderProgram, "uChange");
-	
-	
+
+
+	/*
+		Textures based on code from:
+			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Using_textures_in_WebGL
+			http://learningwebgl.com/blog/?p=507
+	*/
+
+	texBuffer = gl.createTexture();
+	imgBuffer = new Image();
+	imgBuffer.onload = function(){
+		gl.bindTexture(gl.TEXTURE_2D, texBuffer);
+		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imgBuffer);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+		gl.generateMipmap(gl.TEXTURE_2D);
+		gl.bindTexture(gl.TEXTURE_2D, null)
+	}
+	imgBuffer.src = "./textures/crate.jpg";
+
+	vbUVBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.uvData), gl.STATIC_DRAW);
+
+	aTexUV = gl.getAttribLocation(shaderProgram, "aTexUV");
+	gl.enableVertexAttribArray(aTexUV);	
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
+	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
+
 }
 
 function resetBuffers(){

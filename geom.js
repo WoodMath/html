@@ -50,9 +50,10 @@ Vector2d.prototype.updateArrayForm = function(){
 	return this;
 }
 
-function Surface3d(position, normal){
+function Surface3d(position, normal, uv){
 	this.position = position;
 	this.normal = normal;
+	this.uv = uv;
 }
 
 function Geom(){
@@ -68,12 +69,14 @@ function Geom(){
 	 */
 	this.vertexData = [];		//	Assumes this.dataType = WebGLRenderingContext.TRIANGLES
 	this.normalData = [];		//	Assumes this.dataType = WebGLRenderingContext.TRIANGLES
+	this.uvData = [];
 	
 	// The following code is not implemented
 	// is only included to highlight differences of
 	this.vertexIndices = [];	//	If 'this.vertexData' needs indices, Then 'this.vertexIndices' provides it, Else 'this.vertexIndices' is meaningless
 	this.normalIndices = [];	//	If 'this.normalData' needs indices, Then 'this.normalIndices' provides it, Else 'this.normalIndices' is meaningless
-	
+	this.uvIndices = [];
+
 	return this;
 };
 
@@ -103,15 +106,16 @@ Geom.prototype.numIndices = function(){
 }
 
 Geom.prototype.evaluate = function(
-//	vertex_array, normal_array,			// arrays to store output
+//	vertexArray, normalArray,			// arrays to store output
 	fnCallback,							// callback
 	uMin, uMax, uStep,					// u-Variable in UV parameterization
 	vMin, vMax, vStep,					// v-Variable in UV parameterization
 	fParamOne, fParamTwo				// Parameters to feed to the callback
 ){
 
-	var vertex_array = [];
-	var normal_array = [];
+	var vertexArray = [];
+	var normalArray = [];
+	var uvArray = [];
 
 	var uSteps = Math.round( (uMax - uMin) / uStep) + 1;
 	var vSteps = Math.round( (vMax - vMin) / vStep) + 1;
@@ -145,41 +149,52 @@ Geom.prototype.evaluate = function(
 
 //						console.log(" uvInc = [" + uInc + "," + vInc + "], uvIndex = [" + uIndex + "," + vIndex + "] \n");
 						// Triangle 1 vertices
-						vertex_array.push(uv00.position.x, uv00.position.y, uv00.position.z);
-						vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
-						vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
+						vertexArray.push(uv00.position.x, uv00.position.y, uv00.position.z);
+						vertexArray.push(uv10.position.x, uv10.position.y, uv10.position.z);
+						vertexArray.push(uv01.position.x, uv01.position.y, uv01.position.z);
 
 						// Triangle 2 vertices
-						vertex_array.push(uv11.position.x, uv11.position.y, uv11.position.z);
-						vertex_array.push(uv01.position.x, uv01.position.y, uv01.position.z);
-						vertex_array.push(uv10.position.x, uv10.position.y, uv10.position.z);
+						vertexArray.push(uv11.position.x, uv11.position.y, uv11.position.z);
+						vertexArray.push(uv01.position.x, uv01.position.y, uv01.position.z);
+						vertexArray.push(uv10.position.x, uv10.position.y, uv10.position.z);
 
 						// Triangle 1 normals
-						normal_array.push(uv00.normal.x, uv00.normal.y, uv00.normal.z);
-						normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
-						normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+						normalArray.push(uv00.normal.x, uv00.normal.y, uv00.normal.z);
+						normalArray.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+						normalArray.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
 
 						// Triangle 2 normals
-						normal_array.push(uv11.normal.x, uv11.normal.y, uv11.normal.z);
-						normal_array.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
-						normal_array.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+						normalArray.push(uv11.normal.x, uv11.normal.y, uv11.normal.z);
+						normalArray.push(uv01.normal.x, uv01.normal.y, uv01.normal.z);
+						normalArray.push(uv10.normal.x, uv10.normal.y, uv10.normal.z);
+
+						// Triangle 1 UVs
+						uvArray.push(uv00.uv.u, uv00.uv.v);
+						uvArray.push(uv10.uv.u, uv10.uv.v);
+						uvArray.push(uv01.uv.u, uv01.uv.v);
+
+						// Triangle 2 UVs
+						uvArray.push(uv11.uv.x, uv11.uv.v);
+						uvArray.push(uv01.uv.x, uv01.uv.v);
+						uvArray.push(uv10.uv.x, uv10.uv.v);
+				
 					}
 
 				}
 
 /*
 			if(typeof result !== "undefined"){
-				vertex_array.push(result.position.x, result.position.y, result.position.z );
-				normal_array.push(result.normal.x, result.normal.y, result.normal.z );				
+				vertexArray.push(result.position.x, result.position.y, result.position.z );
+				normalArray.push(result.normal.x, result.normal.y, result.normal.z );				
 			}
 */
 			
 		}
 	
 	this.dataType = WebGLRenderingContext.TRIANGLES;
-	this.vertexData = vertex_array;
-	this.normalData = normal_array;
-	
+	this.vertexData = vertexArray;
+	this.normalData = normalArray;
+	this.uvData = uvArray;	
 }
 
 Geom.prototype.transform = function(mat3Transform){
@@ -194,8 +209,10 @@ Geom.prototype.transform = function(mat3Transform){
 	newGeom.dataType = this.dataType;
 	newGeom.vertexData = arrayMatrixMultiply(new Float32Array(this.vertexData.length), mat3Transform, this.vertexData);
 	newGeom.normalData = arrayMatrixMultiply(new Float32Array(this.normalData.length), mat3Normal, this.normalData);
+	newGeom.uvData = this.uvData;
 	newGeom.vertexIndices = this.vertexIndices;
 	newGeom.normalIndices = this.normalIndices;
+	newGeom.uvIndices = this.uvIndices;
 
 	return newGeom;
 
@@ -213,24 +230,29 @@ Geom.prototype.merge = function(geomToAdd){
 
 	var arrVertexVector = new Float32Array(this.vertexData.length + geomToAdd.vertexData.length);
 	var arrNormalVector = new Float32Array(this.normalData.length + geomToAdd.normalData.length);
+	var arrUVVector = new Float32Array(this.uvData.length + geomToAdd.uvData.length);
 
 	var arrVertexIndex = new Int32Array(this.vertexIndices.length + geomToAdd.vertexIndices.length);
 	var arrNormalIndex = new Int32Array(this.normalIndices.length + geomToAdd.normalIndices.length);
+	var arrUVIndex = new Int32Array(this.uvIndices.length + geomToAdd.uvIndices.length);
 
 	//	Assign 'this' arrays
 	for(var iInc = 0; iInc < this.vertexData.length; iInc++){
 		arrVertexVector[iInc] = this.vertexData[iInc];
 		arrNormalVector[iInc] = this.normalData[iInc];
 	}
+	for(var iInc = 0; iInc < this.uvData.length; iInc++)
+		arrUVVector[iInc] = this.uvData[iInc];
 	for(var iInc = 0; iInc < this.vertexIndices.length; iInc++){
 		arrVertexIndex[iInc] = this.vertexIndices[iInc];
 		arrNormalIndex[iInc] = this.normalIndices[iInc];
+		arrUVIndex[iInc] = this.uvIndices[iInc];
 	}
 	
 	
 	var iStartVector = this.numVectors();
-
 	var iStartVectorElement = this.vertexData.length;
+	var iStartUVVectorElement = this.uvData.length / 2;
 	var iStartIndexElement = this.vertexIndices.length;
 
 	//	Assign 'geomToAdd' arrays'
@@ -238,16 +260,21 @@ Geom.prototype.merge = function(geomToAdd){
 		arrVertexVector[iStartVectorElement + iInc] = geomToAdd.vertexData[iInc];
 		arrNormalVector[iStartVectorElement + iInc] = geomToAdd.normalData[iInc];
 	}
+	for(var iInc = 0; iInc < geomToAdd.uvData.length; iInc++)
+		arrUVVector[iStartUVVectorElement + iInc] = geomToAdd.uvData[iInc];
 	for(var iInc = 0; iInc < geomToAdd.vertexIndices.length; iInc++){
 		arrVertexIndex[iStartIndexElement + iInc] = geomToAdd.vertexIndices[iInc] + iStartVector;
 		arrNormalIndex[iStartIndexElement + iInc] = geomToAdd.normalIndices[iInc] + iStartVector;
+		arrUVIndex[iStartIndexElement + iInc] = geomToAdd.uvIndices[iInc] + iStartVector;
 		//	Offset indices of 'newGeomToAdd' by number of vectors in 'this'
 	}
 
 	rtrnGeom.vertexData = arrVertexVector;
 	rtrnGeom.normalData = arrNormalVector;
+	rtrnGeom.uvData = arrUVVector;
 	rtrnGeom.vertexIndices = arrVertexIndex;
 	rtrnGeom.normalIndices = arrNormalIndex;
+	rtrnGeom.uvIndices = arrUVIndex;
 
 	return rtrnGeom;
 	
