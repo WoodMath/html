@@ -182,7 +182,6 @@ var sVs =
 "attribute vec3 aPos;" +
 "attribute vec3 aNorm;" +
 "attribute vec2 aTexUV;"+
-"uniform sampler2D uSampler;"+
 "varying highp vec2 vTexUV;"+
 "uniform vec3 uLight;" +
 "uniform vec3 uColor;" +
@@ -190,6 +189,7 @@ var sVs =
 "uniform mat4 uMove;" +
 "uniform mat4 uNorm;" +
 "uniform mat4 uChange;" +
+"uniform sampler2D uSampler;"+
 "void main() {" +
 "	gl_Position = uProj * uMove * vec4(aPos, 1.0) ; " +
 "	highp vec4 v4LightPos = uMove * vec4(aPos, 1.0) ; " +
@@ -205,8 +205,8 @@ var sFs =
 //"varying highp vec3 vLightWeighting ; " +
 //"attribute vec2 aTexUV ; " +
 "varying highp float vLightWeighting; " +
-"uniform sampler2D uSampler ; " +
 "uniform highp vec3 uColor ; " +
+"uniform sampler2D uSampler ; " +
 "varying highp vec2 vTexUV ; " +
 "void main() {" +
 "	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0) ; " +
@@ -322,7 +322,10 @@ function draw() {
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
-  
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
+	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
+
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	gl.drawElements(objRender.dataType, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 //	*/
