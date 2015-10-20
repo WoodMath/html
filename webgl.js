@@ -326,6 +326,11 @@ function draw() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
 	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 
+
+	gl.activeTexture(gl.TEXTURE0);
+	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
+	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
+
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	gl.drawElements(objRender.dataType, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 //	*/
