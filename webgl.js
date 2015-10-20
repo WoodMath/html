@@ -177,9 +177,13 @@ objRender.normalIndices = [
 		http://learningwebgl.com/blog/?p=684
 */
 var sVs =
-"varying highp vec3 vLightWeighting;" +
+//"varying highp vec3 vLightWeighting;" +
+"varying highp float vLightWeighting;" +
 "attribute vec3 aPos;" +
 "attribute vec3 aNorm;" +
+"attribute vec2 aTexUV;"+
+"uniform sampler2D uSampler;"+
+"varying highp vec2 vTexUV;"+
 "uniform vec3 uLight;" +
 "uniform vec3 uColor;" +
 "uniform mat4 uProj;" +
@@ -193,15 +197,27 @@ var sVs =
 "	vec4 vTransformedNormal = uNorm * vec4(aNorm, 1.0) ; " +
 "	highp vec3 vDirectional = 1.0*(uLight - v4LightPos.xyz) ; " +
 "	highp float fWeighting = max(dot(normalize(vTransformedNormal.xyz), normalize(vDirectional)),0.0) ; " +
-"	vLightWeighting = uColor*0.5 + uColor * fWeighting ; " +
+"	vLightWeighting = fWeighting ; " +
+"	vTexUV = aTexUV ; " +
 "}";
 
 var sFs =
-"varying highp vec3 vLightWeighting;" +
+//"varying highp vec3 vLightWeighting ; " +
+//"attribute vec2 aTexUV ; " +
+"varying highp float vLightWeighting; " +
+"uniform sampler2D uSampler ; " +
+"uniform highp vec3 uColor ; " +
+"varying highp vec2 vTexUV ; " +
 "void main() {" +
-"	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);" +
-"	highp vec3 vNew = vec3(1.0, 1.0, 1.0);" +
-"	gl_FragColor = vec4(vLightWeighting, 1.0);" +
+"	gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0) ; " +
+"	highp vec3 vNew = vec3(1.0, 1.0, 1.0) ; " +
+//"	highp vec4 vColor = vec4(uColor, 1.0); " +
+"	highp vec4 vColor = texture2D(uSampler, vec2(vTexUV.s, vTexUV.t)); " +
+"	highp vec4 v4LightWeighting = vColor * 0.5 + vColor * vLightWeighting ; " +
+//"	gl_FragColor = vec4(v4LightWeighting, 1.0) ; " +
+//"	gl_FragColor = texture2D(uSampler, vec2(vTexUV.s, vTexUV.t)) ; " +
+//"	gl_FragColor = vec4(vLightWeighting, 1.0) + texture2D(uSampler, vec2(vTexUV.s, vTexUV.t)) ; " +
+"	gl_FragColor = v4LightWeighting ; " +
 "}";
 
 
@@ -297,10 +313,10 @@ function draw() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 	*/  
-	gl.drawArrays(objRender.dataType, 0, vbVertexBuffer.numItems);
+//	gl.drawArrays(objRender.dataType, 0, vbVertexBuffer.numItems);
 
 	//	Index Buffer code below is not implemented for Geom.evaluate
-	/*
+//	/*
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
 	gl.vertexAttribPointer(aPos, vbVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);  
 
@@ -309,7 +325,7 @@ function draw() {
   
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	gl.drawElements(objRender.dataType, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-	*/
+//	*/
 
 
 }
@@ -460,7 +476,7 @@ function initBuffers(){
 		Code for index buffers based upon Mozilla documentation at
 			https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL
 	*/
-	/*
+//	/*
 	ibIndexBuffer = gl.createBuffer();
 	ibIndexBuffer.numItems = objRender.numIndices();	// 4 vectors in vertex buffer
 	ibIndexBuffer.itemSize = 3;						// 3 elements in size each
@@ -469,7 +485,7 @@ function initBuffers(){
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	// Bind (Float32 converted) vertex array (objRender.vertexData) to active index buffer (ibIndexBuffer)
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(objRender.vertexIndices), gl.STATIC_DRAW);
-	*/
+//	*/
 
 	/*
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,11 +528,11 @@ function initBuffers(){
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(objRender.uvData), gl.STATIC_DRAW);
 
 	aTexUV = gl.getAttribLocation(shaderProgram, "aTexUV");
-	gl.enableVertexAttribArray(aTexUV);	
+	gl.enableVertexAttribArray(aTexUV);
+	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
-	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
 
 }
 
