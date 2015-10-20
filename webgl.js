@@ -533,6 +533,7 @@ function initBuffers(){
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
+	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
 
 }
 
