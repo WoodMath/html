@@ -547,9 +547,9 @@ function initBuffers(){
 	gl.enableVertexAttribArray(aTexUV);
 	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 
-	gl.activeTexture(gl.TEXTURE0);
-	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
-	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
+//	gl.activeTexture(gl.TEXTURE0);
+//	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
+//	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
 
 }
 
