@@ -215,7 +215,6 @@ var sFs =
 "	highp vec4 v4LightWeighting = vColor * 0.5 + vColor * vLightWeighting ; " +
 //"	gl_FragColor = vec4(v4LightWeighting, 1.0) ; " +
 //"	gl_FragColor = texture2D(uSampler, vec2(vTexUV.s, vTexUV.t)) ; " +
-//"	gl_FragColor = vec4(vLightWeighting, 1.0) + texture2D(uSampler, vec2(vTexUV.s, vTexUV.t)) ; " +
 "	gl_FragColor = v4LightWeighting ; " +
 "}";
 
@@ -238,15 +237,15 @@ var v3light = [0.0, 0.0, 5.0];
 var v3color = [0.0, 1.0, 0.0];
 var v3translate = [0.0, 0.0, -5.0];
 var m4change =
-				[-1.0, 0.0, 0.0, 0.0,
-				  0.0,-1.0, 0.0, 0.0,
-				  0.0, 0.0,-1.0, 0.0,
-				  0.0, 0.0, 0.0, 1.0];
+	[-1.0, 0.0, 0.0, 0.0,
+	  0.0,-1.0, 0.0, 0.0,
+	  0.0, 0.0,-1.0, 0.0,
+	  0.0, 0.0, 0.0, 1.0];
 var m4identity =
-				[ 1.0, 0.0, 0.0, 0.0,
-				  0.0, 1.0, 0.0, 0.0,
-				  0.0, 0.0, 1.0, 0.0,
-				  0.0, 0.0, 0.0, 1.0];
+	[ 1.0, 0.0, 0.0, 0.0,
+	  0.0, 1.0, 0.0, 0.0,
+	  0.0, 0.0, 1.0, 0.0,
+	  0.0, 0.0, 0.0, 1.0];
 
 
 function mouseMovement(e){
@@ -293,7 +292,6 @@ function draw() {
 	gl.uniformMatrix4fv(uProj,false,pMatrix);
 	gl.uniformMatrix4fv(uMove,false,mvMatrix);
 	gl.uniformMatrix4fv(uNorm,false,normMatrix);
-
 	gl.uniformMatrix4fv(uChange,false,m4identity);
 
 	gl.uniform1i(uSampler, 0);
@@ -311,6 +309,9 @@ function draw() {
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbNormalBuffer);
 	gl.vertexAttribPointer(aNorm, vbNormalBuffer.itemSize, gl.FLOAT, false, 0, 0);  
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
+	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 	*/  
 
 	//	Set each texture unit to use a particular texture.
@@ -330,10 +331,8 @@ function draw() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
 	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 
-
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texBuffer);
-	uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
 
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibIndexBuffer);
 	gl.drawElements(objRender.dataType, ibIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
@@ -541,11 +540,6 @@ function initBuffers(){
 	}
 	imgBuffer.src = "./textures/crate.jpg";
 
-
-	// Make position vertex buffer (vbVertexBuffer) active
-	gl.bindBuffer(gl.ARRAY_BUFFER, vbVertexBuffer);
-	// Bind (Float32 converted) vertex array (objRender.vertexData) to active vertex buffer (vbVertexBuffer)
-
 	vbUVBuffer = gl.createBuffer();
 	// Make position vertex buffer (vbUVBuffer) active
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbUVBuffer);
@@ -556,7 +550,7 @@ function initBuffers(){
 	aTexUV = gl.getAttribLocation(shaderProgram, "aTexUV");
 	// enable addtribute variable (aTexUV) when rendering
 	gl.enableVertexAttribArray(aTexUV);
-	// specifies location (aTexUV) of current vertex attributes (vbNormalBuffer)
+	// specifies location (aTexUV) of current vertex attributes (vbUVBuffer)
 	gl.vertexAttribPointer(aTexUV, 2, gl.FLOAT, false, 0, 0);
 	
 
