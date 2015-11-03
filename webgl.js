@@ -590,7 +590,7 @@ function loadParametric(sFunction){
 			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Longitude)
 			0.0, 180.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
 			{
-				radius:1.0
+				radius: 1.0
 			}
 		);
 
@@ -600,8 +600,8 @@ function loadParametric(sFunction){
 			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Along the tube)
 			0.0, 360.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
 			{
-				radiusMinor:1.0,	// radius of tube
-				radiusMajor:2.0		// radius of circle after tube is wrapped around
+				radiusMinor: 1.0,	// radius of tube
+				radiusMajor: 2.0	// radius of circle after tube is wrapped around
 			}
 		 );
 	
@@ -611,8 +611,8 @@ function loadParametric(sFunction){
 			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
 			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
 			{
-				positionMin:-0.5,	// Lower left (f,f) coordinate
-				positionMax:0.5		// Upper right (f,f) coordinate 
+				positionMin: -0.5,	// Lower left (f,f) coordinate
+				positionMax: 0.5	// Upper right (f,f) coordinate 
 			}
 		);
 
@@ -623,8 +623,8 @@ function loadParametric(sFunction){
 			0.0, 4.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
 			0.0, 3.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
 			{
-				size:1.0,
-				offset:-1.0/2.0
+				size: 1.0,
+				offset: -1.0/2.0
 			}
 		);
 */
@@ -634,8 +634,8 @@ function loadParametric(sFunction){
 			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
 			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
 			{
-				positionMin:-1.0,	// Lower left (f,f) coordinate
-				positionMax:1.0	// Upper right (f,f) coordinate 
+				positionMin: -1.0,	// Lower left (f,f) coordinate
+				positionMax: 1.0	// Upper right (f,f) coordinate 
 			}
 		);
 
@@ -677,6 +677,23 @@ function loadParametric(sFunction){
 		obj = rtrnObj;				// Set 'obj' to actual merged object
 	}
 	
+
+	if(sFunction === "superFormula")
+		obj.evaluate(
+			superFormula,			// callback
+			-180.0, 180.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Longitude (-180,180))
+			-90.0, 90.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Lattitude (-90,90))
+			{
+				lattitudeParam: {
+					a: 1, b: 1, c: 1,
+					m: 3, n1: 5, n2: 18, n3: 18
+				},
+				longitudeParam: {
+					a; 1, b: 1, c: 1,
+					m: 2, n1: 2, n2: 2, n3: 2
+				}
+			}
+		 );
 
 
 

@@ -67,3 +67,17 @@ function arrayMatrixMultiply(arrDest, arrMatrix, arrVectorList){
 
 	return arrDest;
 }
+
+function getTriangleNormal(v0, v1, v2){
+
+	var vectorOne = new Vector3d(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
+	var vectorTwo = new Vector3d(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z); 
+
+	var vectorReturn = new Vector3d(
+		1*(vectorOne.y * vectorTwo.z - vectorOne.z * vectorTwo.y),
+		-1*(vectorOne.x * vectorTwo.z - vectorOne.z * vectorTwo.x),
+		1*(vectorOne.x * vectorTwo.y - vectorOne.y * vectorTwo.x)
+
+	);
+
+}

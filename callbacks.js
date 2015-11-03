@@ -29,7 +29,7 @@ function sphere(uParam, vParam, jParam){
 	f3Normal = f3Normal.normalize();
 	// Beautiful thing about a sphere is the normal vector (non-normalized) is equal to the position vector
 
-	var f3uv = new Vector2d(uParam, vParam);	
+	var f3uv = new Vector2d(uParam / 360.0, vParam / 180.0);	
 	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
@@ -74,7 +74,7 @@ function torus(uParam, vParam, jParam){
 	f3Normal.z = fNormalRadiusToBeRotated * Math.sin(uParam * Math.PI / 180.0);
 
 	f3Normal = f3Normal.normalize();
-	var f3uv = new Vector2d(uParam, vParam);	
+	var f3uv = new Vector2d(uParam / 1.0, vParam / 1.0);	
 	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
 	
 	return f3Surface;
@@ -279,10 +279,59 @@ function cube(uParam, vParam, jParam ){
 	return f3Surface;
 	
 }
+function superFormula(angle, jParam){
+	var radius = Math.pow(
+		Math.pow(
+			Math.abs(
+				Math.cos(jParam.m * angle / 4) / jParam.a,
+				jParam.n2
+			)
+		)+
+		Math.pow(
+			Math.abs(
+				Math.sin(jParam.m * angle / 4) / jParam.b,
+				jParam.n3
+			)
+		),
+		-(1 / jParam.n1)
+	);
+}
+
 
 function superShape(uParam, vParam, jParam){
 
 //	See Wikipedia article at
 //		https://en.wikipedia.org/wiki/Superformula
+//		http://www.openprocessing.org/sketch/2638
+
+	if(uParam < -180.0 || 180.0 < uParam)
+		return undefined;
+	if(vParam < -90.0 || 90.0 < vParam)
+		return undefined;
+
+	var fTheta = uParam;		// Longitude (-Pi,Pi)
+	var fPhi = vParam;		// Lattitude (-Pi/2,Pi/2)
+
+
+	var jLattitudeParam = jParam.lattitudeParam;
+	var jlongitudeParam = jParam.longitudeParam;
+
+
+
+
+	
+	var f3Position  = new Vector3d(0.0, 0.0, 0.0);
+	var f3Normal = new Vector3d(0.0, 0.0, 1.0);
+
+	f3Position.x = superShape(fTheta)*Math.cos(fTheta) * superShape(fPhi)*Math.cos(fPhi) ;
+	f3Position.y = superShape(fTheta)*Math.sin(fTheta) * superShape(fPhi)*Math.sin(fPhi) ;
+	f3Position.z = superShape(fPhi)*Math.sin(fPhi);
+
+
+	var f3uv = new Vector2d((uParam + 180.0)/360.0, (vParam + 90)/180.0);	
+	var f3Surface = new Surface3d(f3Position,f3Normal,f3uv);
+	
+	return f3Surface;
+
 
 }
