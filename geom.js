@@ -107,10 +107,10 @@ Geom.prototype.numIndices = function(){
 
 Geom.prototype.evaluate = function(
 //	vertexArray, normalArray,			// arrays to store output
-	fnCallback,							// callback
-	uMin, uMax, uStep,					// u-Variable in UV parameterization
-	vMin, vMax, vStep,					// v-Variable in UV parameterization
-	fParamOne, fParamTwo				// Parameters to feed to the callback
+	fnCallback,					// callback
+	uMin, uMax, uStep,				// u-Variable in UV parameterization
+	vMin, vMax, vStep,				// v-Variable in UV parameterization
+	jParams						// Parameters (in JSON format) to feed to the callback
 ){
 
 	var vertexArray = [];
@@ -127,7 +127,7 @@ Geom.prototype.evaluate = function(
 	for(var uInc = uMin; uInc <= uMax; uInc += uStep, uInc = Math.round(uInc*1000)/1000)
 		for(var vInc = vMin; vInc <= vMax; vInc += vStep, vInc = Math.round(vInc*1000)/1000){
 
-			var result = fnCallback(uInc, vInc, fParamOne, fParamTwo);
+			var result = fnCallback(uInc, vInc, jParam);
 			var uIndex = Math.round((uInc - uMin) / uStep);
 			var vIndex = Math.round((vInc - vMin) / vStep);
 		

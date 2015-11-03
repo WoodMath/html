@@ -1,10 +1,5 @@
 "use strict";	//	Force variable declaration
-function sphere(			//  creates a sphere centered at origin, by rotating circle around Y-axis
-	uParam,
-	vParam,
-	fRadius,				//	radius of circle sphere
-	fDummy					//	parameter not actually being used in calculation
-){
+function sphere(uParam, vParam, jParam){
 	
 /*
 	 Formula for Sphere defined by Jeff Wood to keep him on his toes with his Math
@@ -12,6 +7,9 @@ function sphere(			//  creates a sphere centered at origin, by rotating circle a
 	 If sphere does not render properly consider using UV-parameterization located at
 		https://en.wikipedia.org/wiki/Sphere#Equations_in_three-dimensional_space
 */
+
+	var fRadius = jParam.radius;
+
 	if(uParam < 0.0 || 360.0 < uParam)
 		return undefined;
 	if(vParam < 0.0 || 180.0 < vParam)
@@ -39,12 +37,7 @@ function sphere(			//  creates a sphere centered at origin, by rotating circle a
 	
 }
 
-function torus(				//  creates a torus lying on the XZ-plane
-	uParam,
-	vParam,
-	fRadiusMinor,			//	radius of circle lying on XY-plane offset from the origin by X=fRadiusMajor
-	fRadiusMajor			//	radius of circle lying on XZ-plane
-){
+function torus(uParam, vParam, jParam){
 	
 /*
 	Formula for Torus defined by Jeff Wood to keep him on his toes with his Math
@@ -52,6 +45,9 @@ function torus(				//  creates a torus lying on the XZ-plane
 	If torus does not render properly consider using UV-parameterization located at
 		https://en.wikipedia.org/wiki/Torus#Geometry
 */
+	var fRadiusMinor = jParam.radiusMinor;
+	var fRadiusMajor = jParam.radiusMajor;
+
 	if(uParam < 0.0 || 360.0 < uParam)
 		return undefined;
 	if(vParam < 0.0 || 360.0 < vParam)
@@ -86,16 +82,13 @@ function torus(				//  creates a torus lying on the XZ-plane
 
 }
 
-function square(		//  creates a square parrallel to the XY-plane (Perform rotatios on 6 calls to create cube)
-   uParam,
-   vParam,
-   fPlaneMin,			//	minimum X,Y points to render
-   fPlaneMax			//	maximum X,Y points to render, also used in Calculation of size and translation
-){
+function square(uParam, vParam, jParam){
 	
 /*
 	 Formula for a square Parrallel to XY-plane, positioned based on fPlaneMin and fPlaneMax
 */
+	var fPlaneMin = jParam.positionMin;
+	var fPlaneMax = jParam.positionMax;
 
 	if(uParam < 0.0 || 1.0 < uParam)
 		return undefined;
@@ -116,12 +109,7 @@ function square(		//  creates a square parrallel to the XY-plane (Perform rotati
 	return f3Surface;
 }
 
-function cube(		//  creates a box based on UV-parameterization of cube
-	uParam,
-	vParam,
-	fSize,		//	cube size
-	fOffset		//	determines whether cube is "centered" at origin (fOffset = -fSize/2) or "offset" from origin (fOffset = 0)
-){
+function cube(uParam, vParam, jParam ){
 
 /*
 			***** WARNING *****	
@@ -144,6 +132,8 @@ function cube(		//  creates a box based on UV-parameterization of cube
 	based on UV-mapping of Unit Square
  
 */
+	var fSize = jParam.size;
+	var fOffset = jParam.offset;
 
 	uParam = Math.round(uParam*1000)/1000;
 	vParam = Math.round(vParam*1000)/1000;
@@ -288,4 +278,11 @@ function cube(		//  creates a box based on UV-parameterization of cube
 	
 	return f3Surface;
 	
+}
+
+function superShape(uParam, vParam, jParam){
+
+//	See Wikipedia article at
+//		https://en.wikipedia.org/wiki/Superformula
+
 }

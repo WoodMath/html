@@ -589,7 +589,9 @@ function loadParametric(sFunction){
 			sphere,				// callback
 			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Longitude)
 			0.0, 180.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
-			1.0, "empty"			// function parameters (radius and dummy)
+			{
+				radius:1.0
+			}
 		);
 
 	if(sFunction === "torus")
@@ -597,7 +599,10 @@ function loadParametric(sFunction){
 			torus,				// callback
 			0.0, 360.0, 5.0,		// U-Parameterization (Min, Max, Step)	(Along the tube)
 			0.0, 360.0, 5.0,		// V-Parameterization (Min, Max, Step)	(Degrees from South-Pole)
-			1.0, 2.0			// function parameters (radius and dummy)
+			{
+				radiusMinor:1.0,	// radius of tube
+				radiusMajor:2.0		// radius of circle after tube is wrapped around
+			}
 		 );
 	
 	if(sFunction === "square")
@@ -605,7 +610,10 @@ function loadParametric(sFunction){
 			square,				// callback
 			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
 			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
-			-0.5, 0.5			// function parameters (starting from and stopping at)
+			{
+				positionMin:-0.5,	// Lower left (f,f) coordinate
+				positionMax:0.5		// Upper right (f,f) coordinate 
+			}
 		);
 
 	if(sFunction === "cube"){
@@ -614,7 +622,10 @@ function loadParametric(sFunction){
 			cube,				// callback
 			0.0, 4.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the cube map)
 			0.0, 3.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the cube map)
-			1.0, -1.0/2.0			// function parameters (size and centerinf offset)
+			{
+				size:1.0,
+				offset:-1.0/2.0
+			}
 		);
 */
 		//	Front face	
@@ -622,7 +633,10 @@ function loadParametric(sFunction){
 			square,				// callback
 			0.0, 1.0, 0.1,			// U-Parameterization (Min, Max, Step)	(Along the horizontal of the square)
 			0.0, 1.0, 0.1,			// V-Parameterization (Min, Max, Step)	(Along the vertical of the square)
-			-1.0, 1.0			// function parameters (starting from and stopping at)
+			{
+				positionMin:-1.0,	// Lower left (f,f) coordinate
+				positionMax:1.0	// Upper right (f,f) coordinate 
+			}
 		);
 
 		//	Left face
@@ -667,6 +681,7 @@ function loadParametric(sFunction){
 
 
 	objRender = obj;
+
 	resetBuffers();
 	initBuffers();
 	draw();
