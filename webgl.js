@@ -536,6 +536,14 @@ function initBuffers(){
 		gl.generateMipmap(gl.TEXTURE_2D);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
+	/*
+		See Code at:
+			http://www.html5canvastutorials.com/cookbook/ch9/1369_09_06/
+			http://stackoverflow.com/questions/33225388/webgl-texparami-setting-causing-textures-to-render-to-black
+		for proper implementation corrections
+
+	*/
+
 		draw();
 	}
 	imgBuffer.src = "./textures/crate.jpg";
@@ -689,7 +697,7 @@ function loadParametric(sFunction){
 					m: 3, n1: 5, n2: 18, n3: 18
 				},
 				longitudeParam: {
-					a; 1, b: 1, c: 1,
+					a: 1, b: 1, c: 1,
 					m: 2, n1: 2, n2: 2, n3: 2
 				}
 			}
