@@ -371,7 +371,7 @@ function initGL() {
 	
 		var kMatrix = mat4.create();
 		kMatrix = mat4.identity(kMatrix);
-		kMatrix = mat4.perspective(kMatrix, Math.PI / 180.0 * 90.0, gl.viewportWidth / gl.viewportHeight, 0.01, 100.01);
+		kMatrix = mat4.perspective(kMatrix, Math.PI / 180.0 * 30.0, gl.viewportWidth / gl.viewportHeight, 0.01, 10.5);
 
 
 		// There is a Disconnect between methods being used
